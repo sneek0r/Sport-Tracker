@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" 
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:padding="3px">
+	
+	<TextView 
+		android:id="@+id/tv_profile"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" 
+		android:text="@string/choose_profile"
+		android:textStyle="bold" 
+		android:textSize="18dp" />
+		
+	<Spinner
+		android:id="@+id/sp_profile"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content" 
+		android:prompt="@string/choose_profile"
+		android:entries="@array/profiles" />
+		
+	<Button
+		android:id="@+id/bt_startrecord"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/start_record" />
+		
+	<Button
+		android:id="@+id/bt_showrecords"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/show_records" />
+		
+	<Button
+		android:id="@+id/bt_showstatistics"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/show_statistics" />
+</LinearLayout>

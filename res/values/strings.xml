@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="hello">Hello World, Launcher!</string>
+	<string name="app_name">Sport Tracker</string>
+	<string name="profile">Profile:</string>
+	<string name="choose_profile">Choose a profile:</string>
+	<string-array name="profiles">
+		<item>Running</item>
+		<item>Cycling</item>
+		<item>Walking</item>
+		<item>Other</item>
+	</string-array>
+	<string name="start_record">Start new record</string>
+	<string name="show_records">Show records</string>
+	<string name="show_statistics">Show statistics</string>
+</resources>
