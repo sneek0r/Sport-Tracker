@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" 
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:padding="3px">
+		android:orientation="vertical" 
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:padding="3dp">
 	
 	<TextView 
-		android:id="@+id/tv_profile"
+		android:id="@+id/tv_chose_profile"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content" 
 		android:text="@string/choose_profile"
@@ -21,19 +21,19 @@
 		android:entries="@array/profiles" />
 		
 	<Button
-		android:id="@+id/bt_startrecord"
+		android:id="@+id/bt_start_record"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:text="@string/start_record" />
 		
 	<Button
-		android:id="@+id/bt_showrecords"
+		android:id="@+id/bt_show_records"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:text="@string/show_records" />
 		
 	<Button
-		android:id="@+id/bt_showstatistics"
+		android:id="@+id/bt_show_statistics"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:text="@string/show_statistics" />
