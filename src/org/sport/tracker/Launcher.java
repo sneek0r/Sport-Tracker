@@ -30,6 +30,16 @@ public class Launcher extends Activity {
 				recordStart();
 			}
 		});
+        
+        // add show statistic button listener
+        Button show_statistic = (Button) findViewById(R.id.bt_show_statistic);
+        show_statistic.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				showStatistic();
+			}
+		});
     }
     
     public void recordStart() {
@@ -41,5 +51,16 @@ public class Launcher extends Activity {
     	Intent record_intent = new Intent(Launcher.this, RecordUI.class);
     	record_intent.putExtra("profile", selected_profile);
     	startActivity(record_intent);
+    }
+    
+    public void showStatistic() {
+    	// get selected profile
+    	Spinner profile_spinner = (Spinner) findViewById(R.id.sp_profile);
+        final String selected_profile = (String) profile_spinner.getSelectedItem();
+        
+        // start statistic Activity
+    	Intent statistic_intent = new Intent(Launcher.this, StatisticUI.class);
+    	statistic_intent.putExtra("profile", selected_profile);
+    	startActivity(statistic_intent);
     }
 }

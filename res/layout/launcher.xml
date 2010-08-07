@@ -33,8 +33,8 @@
 		android:text="@string/show_records" />
 		
 	<Button
-		android:id="@+id/bt_show_statistics"
+		android:id="@+id/bt_show_statistic"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/show_statistics" />
+		android:text="@string/show_statistic" />
 </LinearLayout>
