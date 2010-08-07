@@ -131,6 +131,47 @@
 			android:text="@string/zero_location" />
 	</LinearLayout>
 	
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="fill_parent" 
+		android:layout_height="wrap_content"
+		android:paddingTop="3dp" >
+		
+		<TextView 
+			android:id="@+id/tv_alt_static"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:textSize="16dp"
+			android:text="@string/alt" />
+
+		<TextView 
+			android:id="@+id/tv_alt" 
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:layout_weight="2"
+			android:gravity="center_horizontal"
+			android:textSize="16dp"
+			android:text="@string/zero_distance" />
+			
+		<TextView 
+			android:id="@+id/tv_acc_static"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:textSize="16dp"
+			android:text="@string/acc" />
+
+		<TextView 
+			android:id="@+id/tv_acc" 
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			android:layout_weight="2"
+			android:gravity="center_horizontal"
+			android:textSize="16dp"
+			android:text="@string/zero_distance" />
+	</LinearLayout>
+	
 	<View
 		android:id="@+id/map_view"
 		android:orientation="vertical"
@@ -139,10 +180,26 @@
 		android:layout_weight="10"
 		android:paddingTop="3dp" />
 	
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="fill_parent" 
+		android:layout_height="wrap_content"
+		android:paddingTop="3dp" >
+		
+	<Button
+		android:id="@+id/bt_pause_record"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_weight="1"
+		android:paddingTop="3dp" 
+		android:text="@string/pause_record" />
+		
 	<Button
 		android:id="@+id/bt_stop_record"
-		android:layout_width="fill_parent"
+		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:layout_weight="1"
 		android:paddingTop="3dp" 
 		android:text="@string/stop_record" />
+	</LinearLayout>
 </LinearLayout>

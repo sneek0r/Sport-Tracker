@@ -11,6 +11,7 @@
 		<item>Other</item>
 	</string-array>
 	<string name="start_record">Start new record</string>
+	<string name="pause_record">Pause record</string>
 	<string name="stop_record">Stop record</string>
 	<string name="show_records">Show records</string>
 	<string name="show_statistics">Show statistics</string>
@@ -25,5 +26,8 @@
 	<string name="location">Location:</string>
 	<string name="lon">Lon:</string>
 	<string name="lat">Lat:</string>
+	<string name="alt">Alt:</string>
+	<string name="acc">Acc:</string>
 	<string name="zero_location">00:00.0000</string>
+	<string name="show_on_map">Show on map</string>
 </resources>
