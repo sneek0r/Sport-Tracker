@@ -30,4 +30,6 @@
 	<string name="acc">Acc:</string>
 	<string name="zero_location">00:00.0000</string>
 	<string name="show_on_map">Show on map</string>
+	<string name="total_time">Total time:</string>
+	<string name="total_distance">Total distance:</string>
 </resources>

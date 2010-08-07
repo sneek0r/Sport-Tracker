@@ -1,6 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical" 
+	android:layout_width="fill_parent" 
+	android:layout_height="fill_parent" 
+	android:padding="3dp" >
+	
+	<TableLayout 
+		android:layout_width="fill_parent" 
+		android:layout_height="wrap_content"
+		android:stretchColumns="1" >
+	
+		<TableRow>
+			<TextView 
+				android:id="@+id/tv_profile_static" 
+				android:textStyle="bold"
+				android:textSize="20dp"
+				android:text="@string/profile" />
+	
+			<TextView 
+				android:id="@+id/tv_profile" 
+				android:gravity="right"
+				android:textSize="20dp"
+				android:text="@string/test_profile" />
+		</TableRow>
+		
+		<View
+			android:layout_height="2dp"
+			android:background="#FF909090" />
+			
+		<TableRow android:paddingTop="5dp">
+			<TextView 
+				android:id="@+id/tv_total_time_static" 
+				android:textSize="16dp"
+				android:text="@string/total_time" />
+	
+			<TextView 
+				android:id="@+id/tv_total_time" 
+				android:gravity="right"
+				android:textSize="16dp"
+				android:text="@string/zero_time" />
+		</TableRow>
+		
+		<TableRow android:paddingTop="3dp">
+			<TextView 
+				android:id="@+id/tv_total_distance_static" 
+				android:textSize="16dp"
+				android:text="@string/total_distance" />
+	
+			<TextView 
+				android:id="@+id/tv_total_distance" 
+				android:gravity="right"
+				android:textSize="16dp"
+				android:text="@string/zero_distance" />
+		</TableRow>
+		
+		<TableRow android:paddingTop="3dp">
+			<TextView 
+				android:id="@+id/tv_avarage_speed_static" 
+				android:textSize="16dp"
+				android:text="@string/avarage_speed" />
+	
+			<TextView 
+				android:id="@+id/tv_avarage_speed" 
+				android:gravity="right"
+				android:textSize="16dp"
+				android:text="@string/zero_speed" />
+		</TableRow>
+	</TableLayout>
 </LinearLayout>
