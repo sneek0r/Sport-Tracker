@@ -1,10 +1,13 @@
 package org.sport.tracker.utils;
 
+import org.sport.tracker.RecordUI;
+
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.widget.Toast;
 
 
 public class SportTrackerLocationListener implements LocationListener {
@@ -21,8 +24,14 @@ public class SportTrackerLocationListener implements LocationListener {
 	
 	@Override
 	public void onLocationChanged(Location location) {
-		// TODO Auto-generated method stub
 		
+		if (record != null) {
+			record.addNewWaypoint(new SportTrackerWaypoint(location));
+		}
+		
+		if (context instanceof RecordUI) {
+			((RecordUI)context).updateFields(record);
+		}
 	}
 
 	@Override
@@ -43,4 +52,9 @@ public class SportTrackerLocationListener implements LocationListener {
 		
 	}
 
+	public void stopRecord() {
+		LocationManager locManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
+		locManager.removeUpdates(this);
+		Toast.makeText(context, "Record soped!", 3).show();
+	}
 }
