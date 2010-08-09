@@ -9,7 +9,7 @@ public class RecordInfoUI extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.rocordinfo);
+        setContentView(R.layout.recordinfo);
         
         // set profile
         Bundle extras = getIntent().getExtras();
