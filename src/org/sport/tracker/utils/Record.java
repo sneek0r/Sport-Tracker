@@ -22,7 +22,7 @@ public class Record {
 	/**
 	 * List with recorded waypoints
 	 */
-	public List<SportTrackerWaypoint> track;
+	public List<Waypoint> track;
 	/**
 	 * Record comment
 	 */
@@ -30,13 +30,16 @@ public class Record {
 	
 	public Record(String profile) {
 		this.profile = profile;
-		this.track = new LinkedList<SportTrackerWaypoint>();
+		this.track = new LinkedList<Waypoint>();
+		this.distance = 0;
+		this.avarageSpeed = 0;
+		this.comment = "";
 	}
 	
-	public boolean addNewWaypoint(SportTrackerWaypoint waypoint) {
+	public boolean addNewWaypoint(Waypoint waypoint) {
 		Location lastLocation;
 		if (track.size() > 1) {
-			lastLocation = ((LinkedList<SportTrackerWaypoint>) track).getLast().getLocation();
+			lastLocation = ((LinkedList<Waypoint>) track).getLast().getLocation();
 		} else {
 			lastLocation = waypoint.getLocation();
 		}
@@ -45,7 +48,7 @@ public class Record {
 		if (added) {
 			distance += waypoint.getLocation().distanceTo(lastLocation);
 			
-			Location firstLocation = ((LinkedList<SportTrackerWaypoint>) track).getLast().getLocation();
+			Location firstLocation = ((LinkedList<Waypoint>) track).getLast().getLocation();
 			long recordedTime = lastLocation.getTime() - firstLocation.getTime();
 			avarageSpeed = distance / (recordedTime * 1000);
 		}

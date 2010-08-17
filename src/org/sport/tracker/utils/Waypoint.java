@@ -3,7 +3,7 @@ package org.sport.tracker.utils;
 import android.location.Location;
 import android.location.LocationManager;
 
-public class SportTrackerWaypoint {
+public class Waypoint {
 	
 	public final double latitude;
 	public final double longitude;
@@ -12,7 +12,7 @@ public class SportTrackerWaypoint {
 	public final long 	time;
 	public final float 	speed;
 	
-	public SportTrackerWaypoint(double latitude, double longtitude, 
+	public Waypoint(double latitude, double longtitude, 
 								double altitude, float accuracy, 
 								long time, float speed) {
 		
@@ -24,7 +24,7 @@ public class SportTrackerWaypoint {
 		this.speed = speed;
 	}
 	
-	public SportTrackerWaypoint(Location location) {
+	public Waypoint(Location location) {
 		// get location stored data
 		this.latitude = 	location.getLatitude();
 		this.longitude = 	location.getLongitude();

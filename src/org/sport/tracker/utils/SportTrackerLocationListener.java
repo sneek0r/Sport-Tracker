@@ -26,7 +26,7 @@ public class SportTrackerLocationListener implements LocationListener {
 	public void onLocationChanged(Location location) {
 		
 		if (record != null) {
-			record.addNewWaypoint(new SportTrackerWaypoint(location));
+			record.addNewWaypoint(new Waypoint(location));
 		}
 		
 		if (context instanceof RecordUI) {
@@ -55,6 +55,6 @@ public class SportTrackerLocationListener implements LocationListener {
 	public void stopRecord() {
 		LocationManager locManager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
 		locManager.removeUpdates(this);
-		Toast.makeText(context, "Record soped!", 3).show();
+		Toast.makeText(context, "Record stoped!", 3).show();
 	}
 }

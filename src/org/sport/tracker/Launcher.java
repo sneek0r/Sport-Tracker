@@ -1,7 +1,5 @@
 package org.sport.tracker;
 
-import org.sport.tracker.utils.ProfilesOnItemSelectedListener;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,7 +17,6 @@ public class Launcher extends Activity {
         
         // no more needed
         Spinner profile_spinner = (Spinner) findViewById(R.id.sp_profile);
-        profile_spinner.setOnItemSelectedListener(new ProfilesOnItemSelectedListener());
         
         // add record start button listener
         Button record_start = (Button) findViewById(R.id.bt_start_record);
