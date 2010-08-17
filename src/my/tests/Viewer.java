@@ -7,7 +7,6 @@ import my.tests.utils.WaypointDBHelper;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -41,6 +40,8 @@ public class Viewer extends Activity {
         } while (c.moveToNext());
         c.close();
         
+        resolver.delete(uri, null, null);
+        
         val = new ContentValues();
         val.put(WaypointDBHelper.KEY_RECORD_ID, uri.getPathSegments().get(1));
         val.put(WaypointDBHelper.KEY_LATITUDE , 0.1);
@@ -62,6 +63,8 @@ public class Viewer extends Activity {
         	text += "\n";
         } while (c.moveToNext());
         c.close();
+        
+        resolver.delete(uri, "", new String[]{});
         
         tv.setText(text);
         tv.postInvalidate();

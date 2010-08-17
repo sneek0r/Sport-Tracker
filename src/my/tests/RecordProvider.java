@@ -7,7 +7,6 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
-import android.text.TextUtils;
 
 public class RecordProvider extends ContentProvider {
 
@@ -31,8 +30,8 @@ public class RecordProvider extends ContentProvider {
 	
 	@Override
 	public boolean onCreate() {
-		recordDbHelper = new RecordDBHelper(getContext(), RecordDBHelper.RECORDS_TABLE_NAME, null, 3);
-		waypointDbHelber = new WaypointDBHelper(getContext(), WaypointDBHelper.WAYPOINT_TABLE_NAME, null, 3);
+		recordDbHelper = new RecordDBHelper(getContext(), RecordDBHelper.RECORDS_TABLE_NAME, null, 1);
+		waypointDbHelber = new WaypointDBHelper(getContext(), WaypointDBHelper.WAYPOINT_TABLE_NAME, null, 1);
 		return recordDbHelper.getWritableDatabase() == null ||
 				waypointDbHelber.getWritableDatabase() == null ? false : true;
 	}
@@ -92,11 +91,11 @@ public class RecordProvider extends ContentProvider {
 		switch (uriMatcher.match(uri)) {
 		case RECORDS:
 			long recordId = recordDbHelper.insert(values);
-			return Uri.parse("content://org.sport.tracker.provider/records/" + recordId);
+			return Uri.withAppendedPath(RECORD_CONTENT_URI, Long.toString(recordId));
 		
 		case WAYPOINTS:
 			long waypointId = waypointDbHelber.insert(values);
-			return Uri.parse("content://org.sport.tracker.provider/waypoints/" + waypointId);
+			return Uri.withAppendedPath(WAYPOINT_CONTENT_URI, Long.toString(waypointId));
 
 		default:
 			throw new IllegalArgumentException();
@@ -140,7 +139,6 @@ public class RecordProvider extends ContentProvider {
 			String[] selectionArgs) {
 		
 		int count;
-		String recordId = null;
 		switch (uriMatcher.match(uri)) {
 		case RECORDS:
 			count = recordDbHelper.update(null, values, selection, selectionArgs);
