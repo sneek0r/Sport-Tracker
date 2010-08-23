@@ -88,6 +88,7 @@ public class WaypointDBHelper extends SQLiteOpenHelper {
 			return getReadableDatabase().query(TABLE_NAME, projection, 
 				selection, selectionArgs, null, null, sortOrder);
 	}
+	
 	public int update(String waypointId, ContentValues values, String selection,
 			String[] selectionArgs) {
 

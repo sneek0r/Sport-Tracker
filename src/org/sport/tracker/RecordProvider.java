@@ -1,6 +1,7 @@
 package org.sport.tracker;
 
 
+
 import org.sport.tracker.utils.RecordDBHelper;
 import org.sport.tracker.utils.WaypointDBHelper;
 
@@ -9,6 +10,7 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
+import android.text.TextUtils;
 
 public class RecordProvider extends ContentProvider {
 
@@ -23,8 +25,8 @@ public class RecordProvider extends ContentProvider {
 		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 		uriMatcher.addURI("org.sport.tracker", "records", RECORDS);
 		uriMatcher.addURI("org.sport.tracker", "records/#", RECORD_ID);
-		uriMatcher.addURI("org.sport.tracker", "waypoints/", WAYPOINTS);
-		uriMatcher.addURI("org.sport.tracker", "waypoints/#", WAYPOINT_ID);
+		uriMatcher.addURI("org.sport.tracker", "waypoints/#", WAYPOINTS);
+		uriMatcher.addURI("org.sport.tracker", "waypoints/#/#", WAYPOINT_ID);
 	}
 
 	private RecordDBHelper recordDbHelper;
@@ -72,11 +74,14 @@ public class RecordProvider extends ContentProvider {
 				break;
 				
 			case WAYPOINTS:
-				count = waypointDbHelber.delete(null, selection, selectionArgs);
+				count = waypointDbHelber.delete(null, 
+								WaypointDBHelper.KEY_RECORD_ID + " = " + 
+								uri.getPathSegments().get(1) + 
+								insertSelection(selection), selectionArgs);
 				break;
 				
 			case WAYPOINT_ID:
-				count = waypointDbHelber.delete(uri.getPathSegments().get(1), null, null);
+				count = waypointDbHelber.delete(uri.getPathSegments().get(2), null, null);
 				break;
 				
 			default:
@@ -96,8 +101,12 @@ public class RecordProvider extends ContentProvider {
 			return Uri.withAppendedPath(RECORD_CONTENT_URI, Long.toString(recordId));
 		
 		case WAYPOINTS:
+			String rId = uri.getPathSegments().get(1);
+			if (!values.containsKey(WaypointDBHelper.KEY_RECORD_ID)) {
+				values.put(WaypointDBHelper.KEY_RECORD_ID, rId);
+			}
 			long waypointId = waypointDbHelber.insert(values);
-			return Uri.withAppendedPath(WAYPOINT_CONTENT_URI, Long.toString(waypointId));
+			return Uri.withAppendedPath(WAYPOINT_CONTENT_URI, rId+ "/" + Long.toString(waypointId));
 
 		default:
 			throw new IllegalArgumentException();
@@ -119,11 +128,16 @@ public class RecordProvider extends ContentProvider {
 			break;
 			
 		case WAYPOINTS:
+			String rId = uri.getPathSegments().get(1);
+			if (selection != null && !selection.contains(WaypointDBHelper.KEY_RECORD_ID)) {
+				selection = WaypointDBHelper.KEY_RECORD_ID + " = " + rId
+							+ insertSelection(selection);
+			}
 			cursor = waypointDbHelber.query(null, projection, selection, selectionArgs, sortOrder);
 			break;
 			
 		case WAYPOINT_ID:
-			cursor = waypointDbHelber.query(uri.getPathSegments().get(1), projection, null, null, sortOrder);
+			cursor = waypointDbHelber.query(uri.getPathSegments().get(2), projection, null, null, sortOrder);
 			break;
 
 		default:
@@ -149,11 +163,15 @@ public class RecordProvider extends ContentProvider {
 			break;
 			
 		case WAYPOINTS:
+			String rId = uri.getPathSegments().get(1);
+			if (!values.containsKey(WaypointDBHelper.KEY_RECORD_ID)) {
+				values.put(WaypointDBHelper.KEY_RECORD_ID, rId);
+			}
 			count = waypointDbHelber.update(null, values, selection, selectionArgs);
 			break;
 			
 		case WAYPOINT_ID:
-			count = waypointDbHelber.update(uri.getPathSegments().get(1), values, null, null);
+			count = waypointDbHelber.update(uri.getPathSegments().get(2), values, null, null);
 			break;
 
 		default:
@@ -162,5 +180,9 @@ public class RecordProvider extends ContentProvider {
 		
 		getContext().getContentResolver().notifyChange(uri, null);
 		return count;
+	}
+	
+	String insertSelection(String selection) {
+		return TextUtils.isEmpty(selection) ? "" : " AND (" + selection + ") ";
 	}
 }

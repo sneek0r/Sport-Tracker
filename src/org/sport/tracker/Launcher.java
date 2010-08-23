@@ -15,8 +15,7 @@ public class Launcher extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.launcher);
         
-        // no more needed
-        Spinner profile_spinner = (Spinner) findViewById(R.id.sp_profile);
+//        Spinner profile_spinner = (Spinner) findViewById(R.id.sp_profile);
         
         // add record start button listener
         Button record_start = (Button) findViewById(R.id.bt_start_record);
