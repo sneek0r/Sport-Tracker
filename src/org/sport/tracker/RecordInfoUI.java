@@ -55,22 +55,20 @@ public class RecordInfoUI extends Activity {
         	profile_tv.setText(profile);
         	profile_tv.postInvalidate();
 
-//            if( extras.containsKey("time") ) {
-//            	TextView time_tv = (TextView) findViewById(R.id.tv_time);
-//            	Long time = (Long)extras.get("time");
-//            	time_tv.setText(
-//            			Long.toString(time / 60 / 60 / 1000) + ":" +	// hours
-//            			Long.toString(time / 60 / 1000) + ":" +			// munutes
-//            			Long.toString(time / 1000));					// secunds
-//            	time_tv.postInvalidate();
-//            }
+        	TextView time_tv = (TextView) findViewById(R.id.tv_time);
+        	long timeSpan = endTime - startTime;
+        	time_tv.setText(
+        			Long.toString(timeSpan / 60 / 60 / 1000) + ":" +	// hours
+        			Long.toString(timeSpan / 60 / 1000) + ":" +			// munutes
+        			Long.toString(timeSpan / 1000));					// secunds
+        	time_tv.postInvalidate();
             
         	TextView distance_tv = (TextView) findViewById(R.id.tv_distance);
-        	distance_tv.setText(distance + " m");
+        	distance_tv.setText(Math.round(distance) + " m");
         	distance_tv.postInvalidate();
         
         	TextView avarage_speed_tv = (TextView) findViewById(R.id.tv_avarage_speed);
-        	avarage_speed_tv.setText(avarageSpeed + " m/s");
+        	avarage_speed_tv.setText(Math.round(avarageSpeed) + " m/s");
         	avarage_speed_tv.postInvalidate();
         }
     }

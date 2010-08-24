@@ -14,6 +14,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 public class SportTrackerLocationListener implements LocationListener {
@@ -58,16 +59,6 @@ public class SportTrackerLocationListener implements LocationListener {
 			recordId = Long.parseLong(recordUri.getPathSegments().get(1));
 		}
 
-		val.put(WaypointDBHelper.KEY_LATITUDE, location.getLatitude());
-		val.put(WaypointDBHelper.KEY_LONGTITUDE, location.getLongitude());
-		val.put(WaypointDBHelper.KEY_ALTITUDE, location.getAltitude());
-		val.put(WaypointDBHelper.KEY_ACCURACY, location.getAccuracy());
-		val.put(WaypointDBHelper.KEY_SPEED, location.getSpeed());
-		val.put(WaypointDBHelper.KEY_TIME, new Date().getTime());
-
-		// add waypoint
-		Uri waypointUri = resolver.insert(Uri.withAppendedPath(
-				RecordProvider.WAYPOINT_CONTENT_URI, "" + recordId), val);
 		// get record distance
 		Cursor c = resolver.query(recordUri,
 				new String[] { RecordDBHelper.KEY_DISTANCE }, null, null, null);
@@ -77,6 +68,7 @@ public class SportTrackerLocationListener implements LocationListener {
 			distance = c.getFloat(0);
 		}
 		c.close();
+		
 		c = resolver.query(Uri.withAppendedPath(
 				RecordProvider.WAYPOINT_CONTENT_URI, "" + recordId),
 				new String[] { 
@@ -87,30 +79,34 @@ public class SportTrackerLocationListener implements LocationListener {
 				WaypointDBHelper.KEY_TIME);
 
 		if (c.getCount() > 0) {
-			c.moveToFirst();
-			Location firstLoc = new Location("GPS");
-			firstLoc.setLatitude(c.getDouble(0));
-			firstLoc.setLongitude(c.getDouble(1));
-			firstLoc.setAltitude(c.getDouble(2));
-			distance += location.distanceTo(firstLoc);
+			c.moveToLast();
+			Location lastLoc = new Location("GPS");
+			lastLoc.setLatitude(c.getDouble(0));
+			lastLoc.setLongitude(c.getDouble(1));
+			lastLoc.setAltitude(c.getDouble(2));
+			distance += location.distanceTo(lastLoc);
 			val.clear();
 			val.put(RecordDBHelper.KEY_DISTANCE, distance);
-			// update distance
-			int updated = resolver.update(Uri.withAppendedPath(
-					RecordProvider.RECORD_CONTENT_URI, "/" + recordId), val,
-					null, null);
-			if (updated != 1)
-				Toast.makeText(context, "distance update updated rows: "
-						+ updated, 1);
-			
 		}
 		c.close();
 		
 		float avarageSpeed = (distance > 0) ? distance / (timeSpan / 1000) : 0;
-		
-		val.clear();
+		Log.d(getClass().toString(), "avaregeSpeed: " + avarageSpeed);
 		val.put(RecordDBHelper.KEY_AVARAGE_SPEED, avarageSpeed);
 		resolver.update(recordUri, val, null, null);
+		
+		
+		val.clear();
+		val.put(WaypointDBHelper.KEY_LATITUDE, location.getLatitude());
+		val.put(WaypointDBHelper.KEY_LONGTITUDE, location.getLongitude());
+		val.put(WaypointDBHelper.KEY_ALTITUDE, location.getAltitude());
+		val.put(WaypointDBHelper.KEY_ACCURACY, location.getAccuracy());
+		val.put(WaypointDBHelper.KEY_SPEED, location.getSpeed());
+		val.put(WaypointDBHelper.KEY_TIME, new Date().getTime());
+		
+		// add waypoint
+		Uri waypointUri = resolver.insert(Uri.withAppendedPath(
+				RecordProvider.WAYPOINT_CONTENT_URI, "" + recordId), val);
 
 		if (context instanceof RecordUI) {
 			// notify UI
@@ -150,6 +146,5 @@ public class SportTrackerLocationListener implements LocationListener {
 		}
 
 		Toast.makeText(context, "Record stoped!", 3).show();
-
 	}
 }
