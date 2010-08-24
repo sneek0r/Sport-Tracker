@@ -34,7 +34,17 @@ public class RecordUI extends Activity {
 			profile_tv.postInvalidate();
 		}
 
-		// add record start button listener
+		// add record pause button listener
+		Button record_pause = (Button) findViewById(R.id.bt_pause_record);
+		record_pause.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				locationListener.paused = !locationListener.paused;
+			}
+		});
+		
+		// add record stop button listener
 		Button record_stop = (Button) findViewById(R.id.bt_stop_record);
 		record_stop.setOnClickListener(new OnClickListener() {
 
@@ -51,23 +61,13 @@ public class RecordUI extends Activity {
 	public void recordStop() {
 		TextView profile_tv = (TextView) findViewById(R.id.tv_profile);
 		final String profile = (String) profile_tv.getText();
-////		Date startDate = new Date();
-////		Date stopDate = startDate;
-//		long recorded_time = 0;
-//		if (locationListener.record.track.size() > 0) {
-//			long startMillis = ((LinkedList<Waypoint>) locationListener.record.track).getFirst().time;
-//			long stopMillis = ((LinkedList<Waypoint>) locationListener.record.track).getLast().time;
-//			recorded_time = stopMillis - startMillis;
-////			startDate = new Date(startMillis);
-////			stopDate = new Date(stopMillis);
-//		}
-//
 		
+		long recordId = locationListener.recordId;
 		locationListener.stopRecord();
 		
 		// start recordinfo Activity
 		Intent recordinfo_intent = new Intent(RecordUI.this, RecordInfoUI.class);
-		recordinfo_intent.putExtra("profile", profile);
+		recordinfo_intent.putExtra("id", recordId);
 		startActivity(recordinfo_intent);
 		this.finish();
 	}
