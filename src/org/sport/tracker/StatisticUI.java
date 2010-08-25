@@ -7,8 +7,8 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.CursorAdapter;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 public class StatisticUI extends Activity {
@@ -50,30 +50,12 @@ public class StatisticUI extends Activity {
     		c.moveToNext();
     	}
     	if (records != 0) avarageSpeed /= records;
-//    	c.moveToFirst();
-    	c.close();
     	
-    	c = resolver.query(RecordProvider.RECORD_CONTENT_URI, new String[] {
-    			RecordDBHelper.KEY_START_TIME,
-    			RecordDBHelper.KEY_DISTANCE,
-    			RecordDBHelper.KEY_ID
-    	}, null, null, RecordDBHelper.KEY_START_TIME);
-    	
+    	// fill list view
     	c.moveToFirst();
-    	// fill listview
     	ListView lv = (ListView) findViewById(R.id.lv_records);
-//    	new RecordsCursorAdapter(this, c).bindView(lv, this, c);
-    	lv.setAdapter(new SimpleCursorAdapter(this, R.id.record_row, c, new String[] {
-    			RecordDBHelper.KEY_START_TIME,
-    			RecordDBHelper.KEY_DISTANCE,
-    			RecordDBHelper.KEY_ID
-    	}, new int[] {
-    			R.id.tv_record_date,
-    			R.id.tv_record_distance,
-    			R.id.tv_record_id
-    	}));
-    	c.close();
-    	Log.d(getClass().getName(), ""+lv.getAdapter().getCount());
+    	CursorAdapter lv_adapter = new RecordsCursorAdapter(lv.getContext(), c);
+    	lv.setAdapter(new RecordsCursorAdapter(lv.getContext(), c));
     	
     	TextView tv_time = (TextView) findViewById(R.id.tv_total_time);
     	tv_time.setText(

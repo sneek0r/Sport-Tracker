@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.text.TextUtils;
+import android.util.Log;
 
 public class RecordDBHelper extends SQLiteOpenHelper {
 
@@ -82,6 +83,13 @@ public class RecordDBHelper extends SQLiteOpenHelper {
 	
 	public Cursor query(String id, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
+		
+		// debug
+		Log.d(getClass().getName().toString(), "id: " + id + 
+				" projection: "  + (projection != null ? projection.toString() : "") + 
+				" selection: " + selection + 
+				" selectionArgs: " + (selectionArgs != null ? selectionArgs.toString() : "") + 
+				" sortOrder: " + sortOrder);
 		
 		if (!TextUtils.isEmpty(id) && !TextUtils.isDigitsOnly(id))
 			throw new IllegalArgumentException();
