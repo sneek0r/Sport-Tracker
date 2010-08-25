@@ -15,7 +15,7 @@ public class RecordDBHelper extends SQLiteOpenHelper {
 	public static final String RECORDS_TABLE_NAME = "records";
 	static final String WPT_TABLE_NAME = "waypints";
 	
-	public static final String KEY_ID = "id";
+	public static final String KEY_ID = "_id";
 	public static final String KEY_PROFILE = "profile";
 	public static final String KEY_START_TIME = "starttime";
 	public static final String KEY_END_TIME = "endtime";

@@ -61,10 +61,17 @@
 				android:text="@string/avarage_speed" />
 	
 			<TextView 
-				android:id="@+id/tv_avarage_speed" 
+				android:id="@+id/tv_total_avarage_speed" 
 				android:gravity="right"
 				android:textSize="16dp"
 				android:text="@string/zero_speed" />
 		</TableRow>
 	</TableLayout>
+	
+	<ListView 
+		android:id="@+id/lv_records"
+		android:paddingTop="3dp"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent" />	
+		
 </LinearLayout>

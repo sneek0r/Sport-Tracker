@@ -34,8 +34,8 @@ public class RecordProvider extends ContentProvider {
 	
 	@Override
 	public boolean onCreate() {
-		recordDbHelper = new RecordDBHelper(getContext(), RecordDBHelper.RECORDS_TABLE_NAME, null, 1);
-		waypointDbHelber = new WaypointDBHelper(getContext(), WaypointDBHelper.WAYPOINT_TABLE_NAME, null, 1);
+		recordDbHelper = new RecordDBHelper(getContext(), RecordDBHelper.RECORDS_TABLE_NAME, null, 2);
+		waypointDbHelber = new WaypointDBHelper(getContext(), WaypointDBHelper.WAYPOINT_TABLE_NAME, null, 2);
 		return recordDbHelper.getWritableDatabase() == null ||
 				waypointDbHelber.getWritableDatabase() == null ? false : true;
 	}

@@ -14,7 +14,7 @@ public class WaypointDBHelper extends SQLiteOpenHelper {
 
 	public static final String WAYPOINT_TABLE_NAME = "waypoints";
 	
-	public static final String KEY_ID = "id";
+	public static final String KEY_ID = "_id";
 	public static final String KEY_RECORD_ID = "recordID";
 	public static final String KEY_LATITUDE = "latitude";
 	public static final String KEY_LONGTITUDE = "longtitude";
