@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/record_info"
 	android:orientation="vertical" 
 	android:layout_width="fill_parent" 
 	android:layout_height="fill_parent" 
@@ -69,15 +70,15 @@
 	</TableLayout>
 	
 	<View
-		android:id="@+id/map_view"
+	    android:id="@+id/map_view"
 		android:orientation="vertical"
 		android:layout_width="fill_parent" 
 		android:layout_height="wrap_content"
 		android:layout_weight="10"
-		android:paddingTop="3dp" />
+		android:padding="3dp" />
 		
 	<Button
-		android:id="@+id/show_on_map"
+		android:id="@+id/bt_show_on_map"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:paddingTop="3dp" 

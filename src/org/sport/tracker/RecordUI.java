@@ -59,9 +59,6 @@ public class RecordUI extends Activity {
 	}
 
 	public void recordStop() {
-		TextView profile_tv = (TextView) findViewById(R.id.tv_profile);
-		final String profile = (String) profile_tv.getText();
-		
 		long recordId = locationListener.recordId;
 		locationListener.stopRecord();
 		

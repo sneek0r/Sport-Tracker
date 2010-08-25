@@ -34,4 +34,6 @@
 	<string name="total_distance">Total distance:</string>
 <string name="date_static">Date</string>
 <string name="distance_static">Distance</string>
+<string name="api_key">0H-oqoymL2ufvp7mg9MzwyyOGdd4N475Bjd6Gpg</string>
+<string name="hide_map">Hide map</string>
 </resources>

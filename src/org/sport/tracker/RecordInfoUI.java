@@ -2,15 +2,22 @@ package org.sport.tracker;
 
 import org.sport.tracker.utils.RecordDBHelper;
 
-import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.Button;
 import android.widget.TextView;
 
-public class RecordInfoUI extends Activity {
+import com.google.android.maps.MapActivity;
+import com.google.android.maps.MapView;
+
+public class RecordInfoUI extends MapActivity {
 	
 	long recordId = -1;
 	Uri recordUri;
@@ -70,6 +77,23 @@ public class RecordInfoUI extends Activity {
         	TextView avarage_speed_tv = (TextView) findViewById(R.id.tv_avarage_speed);
         	avarage_speed_tv.setText(Math.round(avarageSpeed) + " m/s");
         	avarage_speed_tv.postInvalidate();
+        	
+        	Button button_showMap = (Button) findViewById(R.id.bt_show_on_map);
+        	button_showMap.setOnClickListener( new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					
+					Intent mapIntent = new Intent(RecordInfoUI.this, MapUI.class);
+					mapIntent.putExtra("id", recordId);
+					startActivity(mapIntent);
+				}
+			});
         }
     }
+
+	@Override
+	protected boolean isRouteDisplayed() {
+		return false;
+	}
 }
