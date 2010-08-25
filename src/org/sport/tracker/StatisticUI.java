@@ -4,12 +4,15 @@ import org.sport.tracker.utils.RecordDBHelper;
 
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class StatisticUI extends Activity {
 	
@@ -56,6 +59,14 @@ public class StatisticUI extends Activity {
     	ListView lv = (ListView) findViewById(R.id.lv_records);
     	CursorAdapter lv_adapter = new RecordsCursorAdapter(lv.getContext(), c);
     	lv.setAdapter(new RecordsCursorAdapter(lv.getContext(), c));
+    	lv.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Intent recordInfo_intent = new Intent(StatisticUI.this, RecordInfoUI.class);
+				recordInfo_intent.putExtra("id", id);
+		    	startActivity(recordInfo_intent);
+			}
+		});
     	
     	TextView tv_time = (TextView) findViewById(R.id.tv_total_time);
     	tv_time.setText(
