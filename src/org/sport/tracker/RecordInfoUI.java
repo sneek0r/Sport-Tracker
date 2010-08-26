@@ -10,12 +10,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.maps.MapActivity;
-import com.google.android.maps.MapView;
 
 public class RecordInfoUI extends MapActivity {
 	
@@ -44,19 +42,19 @@ public class RecordInfoUI extends MapActivity {
             		RecordDBHelper.KEY_AVARAGE_SPEED,
             		RecordDBHelper.KEY_COMMENT
             	};
-        	Cursor c = resolver.query(recordUri, projection, null, null, null);
+        	Cursor cursor = resolver.query(recordUri, projection, null, null, null);
         	
-        	if (c.getCount() < 1 || c.getColumnCount() != projection.length) return;
+        	if (cursor.getCount() < 1 || cursor.getColumnCount() != projection.length) return;
         		
-    		c.moveToFirst();
+    		cursor.moveToFirst();
     		int coll = 0;
-    		String profile = 		c.getString(coll++);
-    		long startTime = 		c.getLong(coll++);
-    		long endTime = 			c.getLong(coll++);
-    		float distance =		c.getFloat(coll++);
-    		float avarageSpeed = 	c.getFloat(coll++);
-    		String comment = 		c.getString(coll++);
-    		c.close();
+    		String profile = 		cursor.getString(coll++);
+    		long startTime = 		cursor.getLong(coll++);
+    		long endTime = 			cursor.getLong(coll++);
+    		float distance =		cursor.getFloat(coll++);
+    		float avarageSpeed = 	cursor.getFloat(coll++);
+    		String comment = 		cursor.getString(coll++);
+    		cursor.close();
         	
         	TextView profile_tv = (TextView) findViewById(R.id.tv_profile);
         	profile_tv.setText(profile);
@@ -83,10 +81,7 @@ public class RecordInfoUI extends MapActivity {
 				
 				@Override
 				public void onClick(View v) {
-					
-					Intent mapIntent = new Intent(RecordInfoUI.this, MapUI.class);
-					mapIntent.putExtra("id", recordId);
-					startActivity(mapIntent);
+					startMapActivity();
 				}
 			});
         }
@@ -95,5 +90,11 @@ public class RecordInfoUI extends MapActivity {
 	@Override
 	protected boolean isRouteDisplayed() {
 		return false;
+	}
+	
+	public void startMapActivity() {
+		Intent mapIntent = new Intent(RecordInfoUI.this, MapUI.class);
+		mapIntent.putExtra("id", recordId);
+		startActivity(mapIntent);
 	}
 }

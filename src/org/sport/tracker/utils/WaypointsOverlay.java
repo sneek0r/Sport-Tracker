@@ -2,12 +2,11 @@ package org.sport.tracker.utils;
 
 import java.util.List;
 
-import org.sport.tracker.R;
-
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Point;
 
 import com.google.android.maps.GeoPoint;
@@ -32,12 +31,32 @@ public class WaypointsOverlay extends Overlay {
     public boolean draw(Canvas canvas, MapView mapView, boolean shadow, long when) {
 		super.draw(canvas, mapView, shadow); 
 		
-		Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.punkt);
+		GeoPoint lastWayPoint = null;
+		Point lastPoint = null;
+
+		Point point = new Point();
+		Path path = new Path();
+//		Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.punkt);
 		for (GeoPoint waypoint : waypoints) {
-			Point point = new Point();
 			mapView.getProjection().toPixels(waypoint, point);
-			canvas.drawBitmap(bmp, point.x, point.y - 50, null);
+//			canvas.drawBitmap(bmp, point.x, point.y - 50, null);
+			
+			if (lastWayPoint == null) {
+				lastWayPoint = waypoint;
+				lastPoint = point;
+				path.moveTo(lastPoint.x, lastPoint.y);
+				continue;
+			}
+			path.lineTo(point.x, point.y);
 		}
+		
+		Paint paint = new Paint();
+		paint.setColor(Color.RED);
+		paint.setStyle(Paint.Style.STROKE);
+		paint.setStrokeWidth(3);
+		paint.setAntiAlias(true);
+		canvas.drawPath(path, paint);
+		canvas.save();
 		
 		if (waypoints.size() > 0) {
 //			GeoPoint latMin = getMinGeoPoint(waypoints, DIRECTION_WIDTH);
@@ -47,6 +66,7 @@ public class WaypointsOverlay extends Overlay {
 //			mapView.getController().zoomToSpan(latMax.getLatitudeE6() - latMin.getLatitudeE6(),
 //					lonMax.getLongitudeE6() - lonMin.getLongitudeE6());
 			mapView.getController().animateTo(waypoints.get(waypoints.size() / 2));
+			mapView.getController().setZoom(17);
 		}
 		return true;
     }

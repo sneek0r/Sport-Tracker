@@ -18,6 +18,7 @@ import com.google.android.maps.MapView;
 public class MapUI extends MapActivity {
 
 	long recordId;
+	Cursor cursor;
 	
 	/** Called when the activity is first created. */
     @Override
@@ -30,31 +31,37 @@ public class MapUI extends MapActivity {
         	recordId = extras.getLong("id");
         	
         	ContentResolver resolver = getContentResolver();
-        	Cursor c = resolver.query(Uri.withAppendedPath(RecordProvider.WAYPOINT_CONTENT_URI, ""+recordId), 
+        	cursor = resolver.query(Uri.withAppendedPath(RecordProvider.WAYPOINT_CONTENT_URI, ""+recordId), 
         			null, null, null, WaypointDBHelper.KEY_TIME);
         	
-        	ArrayList<GeoPoint> points = new ArrayList<GeoPoint>(c.getCount());
-        	if (c.getCount() < 1) {
+        	ArrayList<GeoPoint> points = new ArrayList<GeoPoint>(cursor.getCount());
+        	if (cursor.getCount() < 1) {
         		Log.d(getClass().getName().toString(), "record with id "+ recordId + " has no waypoints");
         		return;
         	}
-        	c.moveToFirst();
-    		while (!c.isAfterLast()) {
+        	cursor.moveToFirst();
+    		while (!cursor.isAfterLast()) {
     			GeoPoint point= new GeoPoint(
-    					(int)(c.getDouble(c.getColumnIndex(WaypointDBHelper.KEY_LATITUDE)) * 1E6),
-    					(int)(c.getDouble(c.getColumnIndex(WaypointDBHelper.KEY_LONGTITUDE)) * 1E6));
+    					(int)(cursor.getDouble(cursor.getColumnIndex(WaypointDBHelper.KEY_LATITUDE)) * 1E6),
+    					(int)(cursor.getDouble(cursor.getColumnIndex(WaypointDBHelper.KEY_LONGTITUDE)) * 1E6));
     			
     			points.add(point);
-    			c.moveToNext();
+    			cursor.moveToNext();
     		}
-    		c.close();
+    		cursor.close();
     		
     		MapView mapView= (MapView) findViewById(R.id.map_view);
     		mapView.setBuiltInZoomControls(true);
-    		mapView.getOverlays().add(new WaypointsOverlay(this, points));
+    		mapView.getOverlays().add(new WaypointsOverlay(mapView.getContext(), points));
     		mapView.postInvalidate();
         }
 	}
+    
+
+    public void onDestroy() {
+    	super.onDestroy();
+    	this.finish();
+    }
 	
 	@Override
 	protected boolean isRouteDisplayed() {

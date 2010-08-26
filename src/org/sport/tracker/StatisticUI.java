@@ -62,9 +62,7 @@ public class StatisticUI extends Activity {
     	lv.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Intent recordInfo_intent = new Intent(StatisticUI.this, RecordInfoUI.class);
-				recordInfo_intent.putExtra("id", id);
-		    	startActivity(recordInfo_intent);
+				startRecordInfoActivity(id);
 			}
 		});
     	
@@ -82,5 +80,15 @@ public class StatisticUI extends Activity {
     	TextView tv_speed = (TextView) findViewById(R.id.tv_total_avarage_speed);
     	tv_speed.setText(Math.round(avarageSpeed) + " m/s");
     	tv_speed.postInvalidate();
+    }
+    
+    public void startRecordInfoActivity(long id) {
+    	Intent recordInfo_intent = new Intent(StatisticUI.this, RecordInfoUI.class);
+		recordInfo_intent.putExtra("id", id);
+    	startActivity(recordInfo_intent);
+    }
+    
+    public void onDestroy() {
+    	super.onDestroy();
     }
 }
