@@ -3,7 +3,9 @@ package org.sport.tracker;
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.widget.TextView;
 
 public class DBViewer extends Activity {
@@ -14,6 +16,7 @@ public class DBViewer extends Activity {
         setContentView(R.layout.db);
         
         TextView tv = (TextView) findViewById(R.id.tv);
+        tv.setMovementMethod(ScrollingMovementMethod.getInstance());
         
         ContentResolver resolver = getContentResolver();
         Cursor c = resolver.query(RecordProvider.RECORD_CONTENT_URI, null, null, null, null);
@@ -25,11 +28,12 @@ public class DBViewer extends Activity {
         		text += c.getColumnName(i) + ": " + c.getString(i) + ", ";
         	}
         	text += "\n";
+        	c.moveToNext();
         }
         c.close();
         
-        c = resolver.query(RecordProvider.WAYPOINT_CONTENT_URI, null, null, null, null);
-        text = "Waypoints:\n";
+        c = resolver.query(Uri.withAppendedPath(RecordProvider.WAYPOINT_CONTENT_URI, "0"), null, null, null, null);
+        text += "\nWaypoints:\n";
         
         c.moveToFirst();
         while (!c.isAfterLast()) {
@@ -37,6 +41,7 @@ public class DBViewer extends Activity {
         		text += c.getColumnName(i) + ": " + c.getString(i) + ", ";
         	}
         	text += "\n";
+        	c.moveToNext();
         }
         c.close();
         

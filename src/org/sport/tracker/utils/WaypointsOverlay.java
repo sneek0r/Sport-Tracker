@@ -2,12 +2,16 @@ package org.sport.tracker.utils;
 
 import java.util.List;
 
+import org.sport.tracker.R;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.util.DisplayMetrics;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
@@ -35,10 +39,8 @@ public class WaypointsOverlay extends Overlay {
 
 		Point point = new Point();
 		Path path = new Path();
-//		Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.punkt);
 		for (GeoPoint waypoint : waypoints) {
 			mapView.getProjection().toPixels(waypoint, point);
-//			canvas.drawBitmap(bmp, point.x, point.y - 50, null);
 			
 			if (lastWayPoint == null) {
 				lastWayPoint = waypoint;
@@ -48,6 +50,16 @@ public class WaypointsOverlay extends Overlay {
 			}
 			path.lineTo(point.x, point.y);
 		}
+
+
+		Bitmap flagStart = BitmapFactory.decodeResource(context.getResources(), R.drawable.flag_red);
+		Bitmap flagEnd = BitmapFactory.decodeResource(context.getResources(), R.drawable.flag_green);
+		
+		mapView.getProjection().toPixels(waypoints.get(0), point);
+		canvas.drawBitmap(flagStart, point.x, point.y - 48, null);
+
+		mapView.getProjection().toPixels(waypoints.get(waypoints.size()-1), point);
+		canvas.drawBitmap(flagEnd, point.x, point.y - 48, null);
 		
 		Paint paint = new Paint();
 		paint.setColor(Color.RED);

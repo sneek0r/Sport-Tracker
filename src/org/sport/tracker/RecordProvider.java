@@ -11,6 +11,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 
 public class RecordProvider extends ContentProvider {
 
@@ -117,6 +118,8 @@ public class RecordProvider extends ContentProvider {
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
 		
+		Log.d(getClass().getName().toString(), uri.toString());
+		
 		Cursor cursor;
 		switch (uriMatcher.match(uri)) {
 		case RECORDS:
@@ -130,7 +133,7 @@ public class RecordProvider extends ContentProvider {
 		case WAYPOINTS:
 			String rId = uri.getPathSegments().get(1);
 			if (TextUtils.isEmpty(selection)) selection = "";
-			if (!selection.contains(WaypointDBHelper.KEY_RECORD_ID)) {
+			if (!selection.contains(WaypointDBHelper.KEY_RECORD_ID) && !"0".equals(rId)) {
 				selection = WaypointDBHelper.KEY_RECORD_ID + " = " + rId
 							+ insertSelection(selection);
 			}

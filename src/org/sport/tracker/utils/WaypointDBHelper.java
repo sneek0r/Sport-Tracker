@@ -84,7 +84,7 @@ public class WaypointDBHelper extends SQLiteOpenHelper {
 		if (!TextUtils.isEmpty(waypointId)) {
 			return getReadableDatabase().query(TABLE_NAME, projection, KEY_ID + " = " + waypointId, 
 				null, null, null, sortOrder); 
-		} else 		
+		} else
 			return getReadableDatabase().query(TABLE_NAME, projection, 
 				selection, selectionArgs, null, null, sortOrder);
 	}

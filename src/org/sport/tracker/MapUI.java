@@ -55,12 +55,6 @@ public class MapUI extends MapActivity {
     		mapView.getOverlays().add(new WaypointsOverlay(mapView.getContext(), points));
         }
 	}
-    
-
-    public void onDestroy() {
-    	super.onDestroy();
-    	this.finish();
-    }
 	
 	@Override
 	protected boolean isRouteDisplayed() {
