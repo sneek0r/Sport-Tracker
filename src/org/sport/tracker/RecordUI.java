@@ -19,6 +19,7 @@ import android.widget.TextView;
 public class RecordUI extends Activity {
 
 	public SportTrackerLocationListener locationListener;
+	public String profile;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -29,10 +30,14 @@ public class RecordUI extends Activity {
 		// set profile
 		Bundle extras = getIntent().getExtras();
 		if (extras.containsKey("profile")) {
-			TextView profile_tv = (TextView) findViewById(R.id.tv_profile);
-			profile_tv.setText(extras.getCharSequence("profile"));
-			profile_tv.postInvalidate();
+			profile = extras.getCharSequence("profile").toString();
+		} else {
+			profile = "Other";
 		}
+		
+		TextView profile_tv = (TextView) findViewById(R.id.tv_profile);
+		profile_tv.setText(profile);
+		profile_tv.postInvalidate();
 
 		// add record pause button listener
 		Button record_pause = (Button) findViewById(R.id.bt_pause_record);
@@ -55,7 +60,7 @@ public class RecordUI extends Activity {
 		});
 
 		// set LocationListener
-		locationListener = new SportTrackerLocationListener(this, extras.getString("profile"));
+		locationListener = new SportTrackerLocationListener(this, profile);
 	}
 
 	public void recordStop() {
@@ -144,7 +149,6 @@ public class RecordUI extends Activity {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-
 		locationListener.stopRecord();
 	}
 }

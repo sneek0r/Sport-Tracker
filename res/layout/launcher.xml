@@ -26,11 +26,11 @@
 		android:layout_height="wrap_content"
 		android:text="@string/start_record" />
 		
-	<Button
+	<!-- Button
 		android:id="@+id/bt_show_records"
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/show_records" />
+		android:text="@string/show_records" / -->
 		
 	<Button
 		android:id="@+id/bt_show_statistic"

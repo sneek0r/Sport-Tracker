@@ -17,6 +17,7 @@ import android.widget.AdapterView.OnItemClickListener;
 public class StatisticUI extends Activity {
 	
 	public String profile;
+	
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -26,7 +27,9 @@ public class StatisticUI extends Activity {
         // set profile
         Bundle extras = getIntent().getExtras();
         if( extras.containsKey("profile") ) {
-        	profile = (String) extras.getCharSequence("profile");
+        	profile = extras.getCharSequence("profile").toString();
+        } else {
+        	profile = "Other";
         }
         
         // fill profile text view
@@ -35,7 +38,9 @@ public class StatisticUI extends Activity {
     	profile_tv.postInvalidate();
     	
     	ContentResolver resolver = getContentResolver();
-    	Cursor c = resolver.query(RecordProvider.RECORD_CONTENT_URI, null, null, null, RecordDBHelper.KEY_START_TIME);
+    	Cursor c = resolver.query(RecordProvider.RECORD_CONTENT_URI, null, 
+    			RecordDBHelper.KEY_PROFILE + " = '" + profile + "'",
+    			null, RecordDBHelper.KEY_START_TIME);
     	
     	if (c.getCount() < 1) return;
     	c.moveToFirst();
