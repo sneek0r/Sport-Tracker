@@ -31,7 +31,7 @@ public class MapUI extends MapActivity {
         	recordId = extras.getLong("id");
         	
         	ContentResolver resolver = getContentResolver();
-        	cursor = resolver.query(Uri.withAppendedPath(RecordProvider.WAYPOINT_CONTENT_URI, ""+recordId), 
+        	cursor = resolver.query(Uri.parse(RecordProvider.WAYPOINT_CONTENT_URI + "/" + recordId), 
         			null, null, null, WaypointDBHelper.KEY_TIME);
         	
         	ArrayList<GeoPoint> points = new ArrayList<GeoPoint>(cursor.getCount());
@@ -53,7 +53,6 @@ public class MapUI extends MapActivity {
     		MapView mapView= (MapView) findViewById(R.id.map_view);
     		mapView.setBuiltInZoomControls(true);
     		mapView.getOverlays().add(new WaypointsOverlay(mapView.getContext(), points));
-    		mapView.postInvalidate();
         }
 	}
     

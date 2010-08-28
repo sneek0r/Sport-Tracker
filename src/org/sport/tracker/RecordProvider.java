@@ -129,7 +129,8 @@ public class RecordProvider extends ContentProvider {
 			
 		case WAYPOINTS:
 			String rId = uri.getPathSegments().get(1);
-			if (selection != null && !selection.contains(WaypointDBHelper.KEY_RECORD_ID)) {
+			if (TextUtils.isEmpty(selection)) selection = "";
+			if (!selection.contains(WaypointDBHelper.KEY_RECORD_ID)) {
 				selection = WaypointDBHelper.KEY_RECORD_ID + " = " + rId
 							+ insertSelection(selection);
 			}

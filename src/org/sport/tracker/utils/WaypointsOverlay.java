@@ -19,6 +19,7 @@ public class WaypointsOverlay extends Overlay {
 	public static final int DIRECTION_HEIGHT = 1;
 	Context context;
 	List<GeoPoint> waypoints;
+	boolean drawn = false;
 	
 	
 	public WaypointsOverlay(Context context, List<GeoPoint> waypoints) {
@@ -28,9 +29,7 @@ public class WaypointsOverlay extends Overlay {
 	}
 	
 	@Override
-    public boolean draw(Canvas canvas, MapView mapView, boolean shadow, long when) {
-		super.draw(canvas, mapView, shadow); 
-		
+    public void draw(Canvas canvas, MapView mapView, boolean shadow) {
 		GeoPoint lastWayPoint = null;
 		Point lastPoint = null;
 
@@ -56,19 +55,20 @@ public class WaypointsOverlay extends Overlay {
 		paint.setStrokeWidth(3);
 		paint.setAntiAlias(true);
 		canvas.drawPath(path, paint);
-		canvas.save();
+		super.draw(canvas, mapView, shadow);
 		
-		if (waypoints.size() > 0) {
-//			GeoPoint latMin = getMinGeoPoint(waypoints, DIRECTION_WIDTH);
-//			GeoPoint lonMin = getMinGeoPoint(waypoints, DIRECTION_HEIGHT);
-//			GeoPoint latMax = getMaxGeoPoint(waypoints, DIRECTION_WIDTH);
-//			GeoPoint lonMax = getMaxGeoPoint(waypoints, DIRECTION_HEIGHT);
-//			mapView.getController().zoomToSpan(latMax.getLatitudeE6() - latMin.getLatitudeE6(),
-//					lonMax.getLongitudeE6() - lonMin.getLongitudeE6());
-			mapView.getController().animateTo(waypoints.get(waypoints.size() / 2));
-			mapView.getController().setZoom(17);
+		if (!drawn && waypoints.size() > 0) {
+			GeoPoint latMin = getMinGeoPoint(waypoints, DIRECTION_WIDTH);
+			GeoPoint lonMin = getMinGeoPoint(waypoints, DIRECTION_HEIGHT);
+			GeoPoint latMax = getMaxGeoPoint(waypoints, DIRECTION_WIDTH);
+			GeoPoint lonMax = getMaxGeoPoint(waypoints, DIRECTION_HEIGHT);
+			mapView.getController().animateTo(getCentralGeoPoint(latMin.getLatitudeE6(), 
+					latMax.getLatitudeE6(), lonMin.getLongitudeE6(), lonMax.getLongitudeE6()));
+			mapView.getController().zoomToSpan(
+					(latMax.getLatitudeE6() - latMin.getLatitudeE6())+20,
+					(lonMax.getLongitudeE6() - lonMin.getLongitudeE6())+20);
+			drawn = true;
 		}
-		return true;
     }
 	
 	static GeoPoint getMinGeoPoint(List<GeoPoint> waypoints, int direction) {
@@ -125,40 +125,11 @@ public class WaypointsOverlay extends Overlay {
 		}
 	}
 	
-	GeoPoint getCentralGeoPoint(List<GeoPoint> waypoints, int direction, int minValue, int maxValue) {
+	GeoPoint getCentralGeoPoint(int minLatE6, int maxLatE6, int minLonE6, int maxLonE6) {
 		
-		int central = ((maxValue - minValue) / 2) + minValue;
-		int centralRadius = ((central - minValue) / 3);
-		int currentDist = Integer.MAX_VALUE;
-		GeoPoint centralWp = null;
-		switch (direction) {
-		case DIRECTION_WIDTH:
-			for (GeoPoint p : waypoints) {
-				int dist = Math.abs(p.getLatitudeE6() - central);
-				if (dist < centralRadius) {
-					if ((currentDist - central) > dist ) {
-						 centralWp = p;
-						 currentDist = dist;
-					}
-				}
-			}
-			return centralWp;
-			
-		case DIRECTION_HEIGHT:
-			for (GeoPoint p : waypoints) {
-				int dist = Math.abs(p.getLongitudeE6() - central);
-				if (dist < centralRadius) {
-					if (centralWp != null && (currentDist - central) > dist ) {
-						 centralWp = p;
-						 currentDist = dist;
-					}
-				}
-			}
-			return centralWp;
-			
-		default:
-			return null;
-		}
+		int centralLat = minLatE6 + ((maxLatE6 - minLatE6) / 2);
+		int centralLon = minLonE6 + ((maxLonE6 - minLonE6) / 2);
+		return new GeoPoint(centralLat, centralLon);
 	}
 
 }
