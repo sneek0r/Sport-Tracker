@@ -34,40 +34,46 @@ public class WaypointsOverlay extends Overlay {
 	
 	@Override
     public void draw(Canvas canvas, MapView mapView, boolean shadow) {
-		GeoPoint lastWayPoint = null;
-		Point lastPoint = null;
 
-		Point point = new Point();
-		Path path = new Path();
-		for (GeoPoint waypoint : waypoints) {
-			mapView.getProjection().toPixels(waypoint, point);
-			
-			if (lastWayPoint == null) {
-				lastWayPoint = waypoint;
-				lastPoint = point;
-				path.moveTo(lastPoint.x, lastPoint.y);
-				continue;
+		if (waypoints.size() > 1) {
+			if (shadow) {
+				GeoPoint lastWayPoint = null;
+				Point lastPoint = null;
+				Point point = new Point();
+				Path path = new Path();
+				
+				for (GeoPoint waypoint : waypoints) {
+					mapView.getProjection().toPixels(waypoint, point);
+					
+					if (lastWayPoint == null) {
+						lastWayPoint = waypoint;
+						lastPoint = point;
+						path.moveTo(lastPoint.x, lastPoint.y);
+						continue;
+					}
+					path.lineTo(point.x, point.y);
+				}
+				
+				Paint paint = new Paint();
+				paint.setColor(Color.RED);
+				paint.setStyle(Paint.Style.STROKE);
+				paint.setStrokeWidth(3);
+				paint.setAntiAlias(true);
+				canvas.drawPath(path, paint);
+				
+				Bitmap flagStart = BitmapFactory.decodeResource(context.getResources(), R.drawable.flag_red);
+				Bitmap flagEnd = BitmapFactory.decodeResource(context.getResources(), R.drawable.flag_green);
+				
+				mapView.getProjection().toPixels(waypoints.get(0), point);
+				canvas.drawBitmap(flagStart, point.x, point.y - flagEnd.getHeight(), null);
+		
+				mapView.getProjection().toPixels(waypoints.get(waypoints.size()-1), point);
+				canvas.drawBitmap(flagEnd, point.x, point.y - flagEnd.getHeight(), null);
+			} else {
+				// TODO paint flag shadow
 			}
-			path.lineTo(point.x, point.y);
+			super.draw(canvas, mapView, shadow);
 		}
-
-
-		Bitmap flagStart = BitmapFactory.decodeResource(context.getResources(), R.drawable.flag_red);
-		Bitmap flagEnd = BitmapFactory.decodeResource(context.getResources(), R.drawable.flag_green);
-		
-		mapView.getProjection().toPixels(waypoints.get(0), point);
-		canvas.drawBitmap(flagStart, point.x, point.y - 48, null);
-
-		mapView.getProjection().toPixels(waypoints.get(waypoints.size()-1), point);
-		canvas.drawBitmap(flagEnd, point.x, point.y - 48, null);
-		
-		Paint paint = new Paint();
-		paint.setColor(Color.RED);
-		paint.setStyle(Paint.Style.STROKE);
-		paint.setStrokeWidth(3);
-		paint.setAntiAlias(true);
-		canvas.drawPath(path, paint);
-		super.draw(canvas, mapView, shadow);
 		
 		if (!drawn && waypoints.size() > 0) {
 			GeoPoint latMin = getMinGeoPoint(waypoints, DIRECTION_WIDTH);
@@ -81,6 +87,7 @@ public class WaypointsOverlay extends Overlay {
 					(lonMax.getLongitudeE6() - lonMin.getLongitudeE6())+20);
 			drawn = true;
 		}
+		
     }
 	
 	static GeoPoint getMinGeoPoint(List<GeoPoint> waypoints, int direction) {
