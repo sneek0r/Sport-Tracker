@@ -21,6 +21,7 @@ public class WaypointsOverlay extends Overlay {
 
 	public static final int DIRECTION_WIDTH = 0;
 	public static final int DIRECTION_HEIGHT = 1;
+	
 	Context context;
 	List<GeoPoint> waypoints;
 	boolean drawn = false;
