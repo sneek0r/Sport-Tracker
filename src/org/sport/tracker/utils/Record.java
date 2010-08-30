@@ -24,6 +24,7 @@ public class Record {
 	public float distance = 0f;
 	List<Waypoint> waypoints;
 	public String comment = "";
+	Location lastLoc = null;
 	
 	public Record(Context context, String profile) {
 		this.startTime = new Date().getTime();
@@ -34,8 +35,30 @@ public class Record {
 	}
 	
 	public boolean addWaypoint(Location location) {
-		Waypoint wp = new Waypoint(recordId, location);
-		return 0L != wp.insertDB(context) && waypoints.add(wp);
+		Waypoint waypoint = new Waypoint(recordId, location);
+		if(0L != waypoint.insertDB(context) && waypoints.add(waypoint)) {
+			endTime = waypoint.time;
+			if(lastLoc != null){
+				distance += lastLoc.distanceTo(location); 
+				avarageSpeed = distance / ((endTime - startTime) / 1000);
+			}
+			lastLoc = location;
+			return 1 == updateDB();
+		} else return false;
+	}
+	
+	public int getWaypointsCount() {
+		return waypoints.size();
+	}
+	
+	public Waypoint getWaypoint(int index) {
+		return waypoints.get(index);
+	}
+	
+	public boolean deleteWaypoint(int index) {
+		Waypoint wp = waypoints.get(index);
+		return Waypoint.deleteDB(context, wp.recordId, wp.waypointId) == 1 &&
+			waypoints.remove(wp);
 	}
 	
 	public final Uri insertDB() {
@@ -115,11 +138,16 @@ public class Record {
 		return records;
 	}
 	
-	public static int deleteDB(Context context, long recordId) {
+	public static boolean deleteDB(Context context, long recordId) {
 		ContentResolver resolver = context.getContentResolver();
-		return resolver.delete(
+		
+		if (resolver.delete(
 				Uri.withAppendedPath(RecordProvider.RECORD_CONTENT_URI, ""+recordId),
-				null, null);
+				null, null) == 1) {
+			
+			Waypoint.deleteDB(context, recordId, null, null);
+			return true;
+		} else return false;
 	}
 
 }

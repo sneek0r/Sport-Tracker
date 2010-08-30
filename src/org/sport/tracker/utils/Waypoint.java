@@ -126,12 +126,19 @@ public class Waypoint {
 		return waypoints;
 	}
 	
-	public static int deleteDB(Context context, long recordId, long waypointId, 
-			String where, String[] selectionArgs) {
+	public static int deleteDB(Context context, long recordId, long waypointId) {
 		
 		ContentResolver resolver = context.getContentResolver();
 		return resolver.delete(Uri.withAppendedPath(
-				RecordProvider.WAYPOINT_CONTENT_URI, ""+recordId+"/"+waypointId)
-				, where, selectionArgs);
+				RecordProvider.WAYPOINT_CONTENT_URI, ""+recordId+"/"+waypointId),
+				null, null);
+	}
+	
+	public static int deleteDB(Context context, long recordId, String where, String[] selectionArgs) {
+		
+		ContentResolver resolver = context.getContentResolver();
+		return resolver.delete(Uri.withAppendedPath(
+				RecordProvider.WAYPOINT_CONTENT_URI, ""+recordId),
+				where, selectionArgs);
 	}
 }
