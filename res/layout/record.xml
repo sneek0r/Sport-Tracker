@@ -186,13 +186,13 @@
 		android:layout_height="wrap_content"
 		android:paddingTop="3dp" >
 		
-	<Button
+	<!-- Button
 		android:id="@+id/bt_pause_record"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_weight="1"
 		android:paddingTop="3dp" 
-		android:text="@string/pause_record" />
+		android:text="@string/pause_record" / -->
 		
 	<Button
 		android:id="@+id/bt_stop_record"

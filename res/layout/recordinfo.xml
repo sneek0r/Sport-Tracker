@@ -67,6 +67,18 @@
 				android:textSize="16dp"
 				android:text="@string/zero_speed" />
 		</TableRow>
+		
+		<TableRow android:paddingTop="3dp">
+			<TextView 
+				android:id="@+id/tv_comment_static" 
+				android:textSize="16dp"
+				android:text="@string/comment" />
+	
+			<TextView 
+				android:id="@+id/tv_comment" 
+				android:gravity="right"
+				android:textSize="16dp" />
+		</TableRow>
 	</TableLayout>
 	
 	<View

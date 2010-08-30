@@ -1,15 +1,14 @@
 package org.sport.tracker;
 
-import org.sport.tracker.utils.RecordDBHelper;
+import java.util.Date;
+
+import org.sport.tracker.utils.Record;
 import org.sport.tracker.utils.SportTrackerLocationListener;
-import org.sport.tracker.utils.WaypointDBHelper;
+import org.sport.tracker.utils.Waypoint;
 
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.database.Cursor;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,16 +37,6 @@ public class RecordUI extends Activity {
 		TextView profile_tv = (TextView) findViewById(R.id.tv_profile);
 		profile_tv.setText(profile);
 		profile_tv.postInvalidate();
-
-		// add record pause button listener
-		Button record_pause = (Button) findViewById(R.id.bt_pause_record);
-		record_pause.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View arg0) {
-				locationListener.paused = !locationListener.paused;
-			}
-		});
 		
 		// add record stop button listener
 		Button record_stop = (Button) findViewById(R.id.bt_stop_record);
@@ -60,12 +49,11 @@ public class RecordUI extends Activity {
 		});
 
 		// set LocationListener
-		locationListener = new SportTrackerLocationListener(this, profile);
+		locationListener = new SportTrackerLocationListener(this, profile, new Date().getTime());
 	}
 
 	public void recordStop() {
-		long recordId = locationListener.recordId;
-		locationListener.stopRecord();
+		long recordId = locationListener.stopRecord(new Date().getTime());
 		
 		// start recordinfo Activity
 		Intent recordinfo_intent = new Intent(RecordUI.this, RecordInfoUI.class);
@@ -74,46 +62,18 @@ public class RecordUI extends Activity {
 		this.finish();
 	}
 
-	public void updateFields(Uri record, Uri waypoint) {
-		if (locationListener.recordId < 0) 
-			return;
-		
-		if (!this.isFinishing()) {
-			ContentResolver resolver = getContentResolver();
-			Cursor c = resolver.query(waypoint, new String[] { 
-					WaypointDBHelper.KEY_LATITUDE,
-					WaypointDBHelper.KEY_LONGTITUDE,
-					WaypointDBHelper.KEY_ALTITUDE,
-					WaypointDBHelper.KEY_ACCURACY,
-					WaypointDBHelper.KEY_SPEED,
-					WaypointDBHelper.KEY_TIME}, null, null, null);
-			
-			if (c.getColumnCount() != 6)
-				return;
-			
-			c.moveToFirst();
-			final double latitude = 	c.getDouble(0);
-			final double longitude = 	c.getDouble(1);
-			final double altitude = 	c.getDouble(2);
-			final float accuracy = 		c.getFloat(3);
-			final float speed = 		c.getFloat(4);
-			c.close();
-			
-			c = resolver.query(record, new String[] {
-					RecordDBHelper.KEY_DISTANCE,
-					RecordDBHelper.KEY_AVARAGE_SPEED
-				}, null, null, null);
-			
-			float distance = 		0;
-			float avarageSpeed = 	0;
-			
-			if (c.getCount() > 0) {
-				c.moveToFirst();
-				distance = 		c.getFloat(0);
-				avarageSpeed = 	c.getFloat(1);
-			}
-			c.close();
+	public void updateFields(Record record, Waypoint waypoint) {
 
+		if (!this.isFinishing()) {
+			
+			final double latitude = 	waypoint.latitude;
+			final double longitude = 	waypoint.longtitude;
+			final double altitude = 	waypoint.altitude;
+			final float accuracy = 		waypoint.accuracy;
+			final float speed = 		waypoint.speed;
+			float distance = 			record.distance;
+			float avarageSpeed = 		record.avarageSpeed;
+			
 			TextView tv_latitude = (TextView) findViewById(R.id.tv_lat);
 			tv_latitude.setText(Location.convert(latitude,
 					Location.FORMAT_MINUTES));
@@ -149,6 +109,6 @@ public class RecordUI extends Activity {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		locationListener.stopRecord();
+		locationListener.stopRecord(new Date().getTime());
 	}
 }

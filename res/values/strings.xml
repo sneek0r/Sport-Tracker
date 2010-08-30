@@ -38,4 +38,6 @@
 <string name="hide_map">Hide map</string>
 <string name="api_key_desktop">0H-oqoymL2uebSgkEvg8nfm4aAOhA0P-Cic_t9Q</string>
 <string name="api_key">0H-oqoymL2uebSgkEvg8nfm4aAOhA0P-Cic_t9Q</string>
+<string name="comment">Comment:</string>
+<string name="no_comment">no comment</string>
 </resources>

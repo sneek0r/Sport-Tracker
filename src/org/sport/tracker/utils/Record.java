@@ -27,17 +27,22 @@ public class Record {
 	Location lastLoc = null;
 	
 	public Record(Context context, String profile) {
-		this.startTime = new Date().getTime();
-		this.endTime = startTime;
+		this(context, profile, new Date().getTime());
+	}
+	
+	public Record(Context context, String profile, long time) {
+		
 		this.context = context;
 		this.profile = profile;
+		this.startTime = time;
+		this.endTime = startTime;
 		this.waypoints = new ArrayList<Waypoint>();
 	}
 	
 	public boolean addWaypoint(Location location) {
 		Waypoint waypoint = new Waypoint(recordId, location);
 		if(0L != waypoint.insertDB(context) && waypoints.add(waypoint)) {
-			endTime = waypoint.time;
+			endTime = new Date().getTime();
 			if(lastLoc != null){
 				distance += lastLoc.distanceTo(location); 
 				avarageSpeed = distance / ((endTime - startTime) / 1000);
@@ -80,6 +85,7 @@ public class Record {
 		values.put(RecordDBHelper.KEY_DISTANCE, distance);
 		values.put(RecordDBHelper.KEY_AVARAGE_SPEED, avarageSpeed);
 		values.put(RecordDBHelper.KEY_COMMENT, comment);
+		if (recordUrl == null) insertDB();
 		return resolver.update(recordUrl, values, null, null);
 	}
 	

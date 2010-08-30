@@ -1,11 +1,8 @@
 package org.sport.tracker;
 
-import org.sport.tracker.utils.RecordDBHelper;
+import org.sport.tracker.utils.Record;
 
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,7 +15,7 @@ import com.google.android.maps.MapActivity;
 public class RecordInfoUI extends MapActivity {
 	
 	long recordId = -1;
-	Uri recordUri;
+	Record record;
 	
 	/** Called when the activity is first created. */
     @Override
@@ -30,31 +27,19 @@ public class RecordInfoUI extends MapActivity {
         Bundle extras = getIntent().getExtras();
         if( extras.containsKey("id") ) {
         	recordId = extras.getLong("id");
-        	Log.d(getClass().toString(),"recordId: " + recordId);
+        	try {
+        		record = Record.queryDB(this, recordId);
+        	} catch (IllegalArgumentException e) {
+        		Log.d(getClass().getName().toString(), "record with id " + recordId + " does not exist");
+        		return;
+        	}
         	
-        	recordUri = Uri.parse(RecordProvider.RECORD_CONTENT_URI + "/" + recordId);
-        	ContentResolver resolver = getContentResolver();
-        	String[] projection = new String [] {
-            		RecordDBHelper.KEY_PROFILE,
-            		RecordDBHelper.KEY_START_TIME,
-            		RecordDBHelper.KEY_END_TIME,
-            		RecordDBHelper.KEY_DISTANCE,
-            		RecordDBHelper.KEY_AVARAGE_SPEED,
-            		RecordDBHelper.KEY_COMMENT
-            	};
-        	Cursor cursor = resolver.query(recordUri, projection, null, null, null);
-        	
-        	if (cursor.getCount() < 1 || cursor.getColumnCount() != projection.length) return;
-        		
-    		cursor.moveToFirst();
-    		int coll = 0;
-    		String profile = 		cursor.getString(coll++);
-    		long startTime = 		cursor.getLong(coll++);
-    		long endTime = 			cursor.getLong(coll++);
-    		float distance =		cursor.getFloat(coll++);
-    		float avarageSpeed = 	cursor.getFloat(coll++);
-    		String comment = 		cursor.getString(coll++);
-    		cursor.close();
+    		String profile = 		record.profile;
+    		long startTime = 		record.startTime;
+    		long endTime = 			record.endTime;
+    		float distance =		record.distance;
+    		float avarageSpeed = 	record.avarageSpeed;
+    		String comment = 		record.comment;
         	
         	TextView profile_tv = (TextView) findViewById(R.id.tv_profile);
         	profile_tv.setText(profile);
