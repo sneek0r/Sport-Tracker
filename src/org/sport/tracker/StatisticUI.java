@@ -11,6 +11,7 @@ import java.util.TimeZone;
 
 import org.sport.tracker.utils.Record;
 import org.sport.tracker.utils.RecordDBHelper;
+import org.sport.tracker.utils.RecordsListAdapter;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -53,35 +54,21 @@ public class StatisticUI extends Activity {
     	long totalTime = 0;
     	float distance = 0.0f;
     	float avarageSpeed = 0.0f;
-    	List<Map<String,String>> recordsViewList = new ArrayList<Map<String,String>>();
     	for (Record record : records) {
     		totalTime += record.endTime - record.startTime;
     		distance += record.distance;
     		avarageSpeed += record.avarageSpeed;
-    		Map<String,String> recordMap = new HashMap<String, String>();
-    		recordMap.put(RecordDBHelper.KEY_ID, ""+record.recordId);
-    		recordMap.put(RecordDBHelper.KEY_START_TIME, new Date(record.startTime).toLocaleString());
-    		recordMap.put(RecordDBHelper.KEY_DISTANCE, ""+Math.round(record.distance)+" m");
-    		recordsViewList.add(recordMap);
     	}
     	avarageSpeed /= records.size();
     	
-    	
-    	
     	// fill list view
     	ListView lv = (ListView) findViewById(R.id.lv_records);
-    	lv.setAdapter(new SimpleAdapter(this, recordsViewList, R.layout.record_row, new String[] {
-    			RecordDBHelper.KEY_START_TIME,
-    			RecordDBHelper.KEY_DISTANCE,
-    			RecordDBHelper.KEY_ID
-    	}, new int[] {
-    			R.id.tv_record_date,
-    			R.id.tv_record_distance
-    	}));
+    	lv.setAdapter(new RecordsListAdapter(lv.getContext(), R.layout.record_row, records));
     	lv.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				startRecordInfoActivity(id);
+				Record record = (Record) parent.getAdapter().getItem(position);
+				startRecordInfoActivity(record.recordId);
 			}
 		});
     	

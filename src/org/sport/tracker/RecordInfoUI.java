@@ -66,6 +66,10 @@ public class RecordInfoUI extends MapActivity {
         	avarage_speed_tv.setText(Math.round(avarageSpeed) + " m/s");
         	avarage_speed_tv.postInvalidate();
         	
+        	TextView comment_tv = (TextView) findViewById(R.id.tv_comment);
+        	comment_tv.setText(comment);
+        	comment_tv.postInvalidate();
+        	
         	Button button_showMap = (Button) findViewById(R.id.bt_show_on_map);
         	button_showMap.setOnClickListener( new OnClickListener() {
 				
