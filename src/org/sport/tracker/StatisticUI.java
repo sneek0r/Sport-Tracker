@@ -1,16 +1,24 @@
 package org.sport.tracker;
 
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TimeZone;
+
+import org.sport.tracker.utils.Record;
 import org.sport.tracker.utils.RecordDBHelper;
 
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.CursorAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -36,34 +44,40 @@ public class StatisticUI extends Activity {
         TextView profile_tv = (TextView) findViewById(R.id.tv_profile);
     	profile_tv.setText(profile);
     	profile_tv.postInvalidate();
-    	
-    	ContentResolver resolver = getContentResolver();
-    	Cursor c = resolver.query(RecordProvider.RECORD_CONTENT_URI, null, 
-    			RecordDBHelper.KEY_PROFILE + " = '" + profile + "'",
+
+    	List<Record> records = Record.queryDB(this, RecordDBHelper.KEY_PROFILE + " = '" + profile + "'", 
     			null, RecordDBHelper.KEY_START_TIME);
     	
-    	if (c.getCount() < 1) return;
-    	c.moveToFirst();
+    	if (records.size() < 1) return;
+
     	long totalTime = 0;
     	float distance = 0.0f;
     	float avarageSpeed = 0.0f;
-    	int records = 0;
-    	while (!c.isAfterLast()) {
-    		records++;
-    		long startTime = c.getLong(c.getColumnIndex(RecordDBHelper.KEY_START_TIME));
-    		long endTime = c.getLong(c.getColumnIndex(RecordDBHelper.KEY_END_TIME));
-    		totalTime += Math.abs(endTime - startTime);
-    		distance += Math.abs(c.getFloat(c.getColumnIndex(RecordDBHelper.KEY_DISTANCE)));
-    		avarageSpeed += Math.abs(c.getFloat(c.getColumnIndex(RecordDBHelper.KEY_AVARAGE_SPEED)));
-    		c.moveToNext();
+    	List<Map<String,String>> recordsViewList = new ArrayList<Map<String,String>>();
+    	for (Record record : records) {
+    		totalTime += record.endTime - record.startTime;
+    		distance += record.distance;
+    		avarageSpeed += record.avarageSpeed;
+    		Map<String,String> recordMap = new HashMap<String, String>();
+    		recordMap.put(RecordDBHelper.KEY_ID, ""+record.recordId);
+    		recordMap.put(RecordDBHelper.KEY_START_TIME, new Date(record.startTime).toLocaleString());
+    		recordMap.put(RecordDBHelper.KEY_DISTANCE, ""+Math.round(record.distance)+" m");
+    		recordsViewList.add(recordMap);
     	}
-    	if (records != 0) avarageSpeed /= records;
+    	avarageSpeed /= records.size();
+    	
+    	
     	
     	// fill list view
-    	c.moveToFirst();
     	ListView lv = (ListView) findViewById(R.id.lv_records);
-    	CursorAdapter lv_adapter = new RecordsCursorAdapter(lv.getContext(), c);
-    	lv.setAdapter(new RecordsCursorAdapter(lv.getContext(), c));
+    	lv.setAdapter(new SimpleAdapter(this, recordsViewList, R.layout.record_row, new String[] {
+    			RecordDBHelper.KEY_START_TIME,
+    			RecordDBHelper.KEY_DISTANCE,
+    			RecordDBHelper.KEY_ID
+    	}, new int[] {
+    			R.id.tv_record_date,
+    			R.id.tv_record_distance
+    	}));
     	lv.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -72,10 +86,12 @@ public class StatisticUI extends Activity {
 		});
     	
     	TextView tv_time = (TextView) findViewById(R.id.tv_total_time);
-    	tv_time.setText(
-    			Long.toString(totalTime / 60 / 60 / 1000) + ":" +	// hours
-    			Long.toString(totalTime / 60 / 1000) + ":" +		// munutes
-    			Long.toString(totalTime / 1000));					// secunds);
+    	Date time = new Date(totalTime-TimeZone.getDefault().getOffset(totalTime));
+    	tv_time.setText(time.getHours()+":"+time.getMinutes()+":"+time.getSeconds());
+//    	tv_time.setText(
+//    			Long.toString(totalTime / 60 / 60 / 1000) + ":" +	// hours
+//    			Long.toString(totalTime / 60 / 1000) + ":" +		// munutes
+//    			Long.toString(totalTime / 1000));					// secunds);
     	tv_time.postInvalidate();
     	
     	TextView tv_distance = (TextView) findViewById(R.id.tv_total_distance);
