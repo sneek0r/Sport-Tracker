@@ -7,11 +7,7 @@ import org.sport.tracker.utils.Waypoint;
 import org.sport.tracker.utils.WaypointDBHelper;
 import org.sport.tracker.utils.WaypointsOverlay;
 
-import android.content.ContentResolver;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;

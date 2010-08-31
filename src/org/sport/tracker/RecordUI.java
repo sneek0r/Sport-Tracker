@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.sport.tracker.utils.Record;
 import org.sport.tracker.utils.SportTrackerLocationListener;
+import org.sport.tracker.utils.TimeCounteRunnable;
 import org.sport.tracker.utils.Waypoint;
 
 import android.app.Activity;
@@ -19,6 +20,7 @@ public class RecordUI extends Activity {
 
 	public SportTrackerLocationListener locationListener;
 	public String profile;
+	Runnable timeCounter = null;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -48,12 +50,20 @@ public class RecordUI extends Activity {
 			}
 		});
 
+		final TextView tv_time = (TextView) findViewById(R.id.tv_time);
+		long startTime = new Date().getTime();
+		timeCounter = new TimeCounteRunnable(tv_time, startTime);
+		tv_time.post(timeCounter);
+		
 		// set LocationListener
-		locationListener = new SportTrackerLocationListener(this, profile, new Date().getTime());
+		locationListener = new SportTrackerLocationListener(this, profile, startTime);
 	}
 
 	public void recordStop() {
-		long recordId = locationListener.stopRecord(new Date().getTime());
+		final TextView tv_time = (TextView) findViewById(R.id.tv_time);
+		final long endTime = ((TimeCounteRunnable) timeCounter).endTime;
+		tv_time.removeCallbacks(timeCounter);
+		final long recordId = locationListener.stopRecord(endTime);
 		
 		// start recordinfo Activity
 		Intent recordinfo_intent = new Intent(RecordUI.this, RecordInfoUI.class);

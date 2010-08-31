@@ -1,5 +1,6 @@
 package org.sport.tracker;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -51,11 +52,8 @@ public class RecordInfoUI extends MapActivity {
         	TextView time_tv = (TextView) findViewById(R.id.tv_time);
         	long timeSpan = endTime - startTime;
         	Date time = new Date(timeSpan-TimeZone.getDefault().getOffset(timeSpan));
-        	time_tv.setText(time.getHours()+":"+time.getMinutes()+":"+time.getSeconds());
-//        	time_tv.setText(
-//        			Long.toString(timeSpan / 60 / 60 / 1000) + ":" +	// hours
-//        			Long.toString(timeSpan / 60 / 1000) + ":" +			// munutes
-//        			Long.toString(timeSpan / 1000));					// secunds
+        	SimpleDateFormat dateFormatter = new SimpleDateFormat("HH:mm:ss");
+        	time_tv.setText(dateFormatter.format(time));
         	time_tv.postInvalidate();
             
         	TextView distance_tv = (TextView) findViewById(R.id.tv_distance);

@@ -1,5 +1,6 @@
 package org.sport.tracker;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -68,11 +69,8 @@ public class StatisticUI extends Activity {
     	
     	TextView tv_time = (TextView) findViewById(R.id.tv_total_time);
     	Date time = new Date(totalTime-TimeZone.getDefault().getOffset(totalTime));
-    	tv_time.setText(time.getHours()+":"+time.getMinutes()+":"+time.getSeconds());
-//    	tv_time.setText(
-//    			Long.toString(totalTime / 60 / 60 / 1000) + ":" +	// hours
-//    			Long.toString(totalTime / 60 / 1000) + ":" +		// munutes
-//    			Long.toString(totalTime / 1000));					// secunds);
+    	SimpleDateFormat dateFormatter = new SimpleDateFormat("HH:mm:ss");
+    	tv_time.setText(dateFormatter.format(time));
     	tv_time.postInvalidate();
     	
     	TextView tv_distance = (TextView) findViewById(R.id.tv_total_distance);
