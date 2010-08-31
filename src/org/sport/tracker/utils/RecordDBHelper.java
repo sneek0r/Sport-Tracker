@@ -10,22 +10,59 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.text.TextUtils;
 
+/**
+ * Record database helper. Provide Record CRUD functions.
+ * 
+ * @author Waldemar Smirnow
+ *
+ */
 public class RecordDBHelper extends SQLiteOpenHelper {
 
+	/**
+	 * Static records table name (should be used for constructor).
+	 */
 	public static final String RECORDS_TABLE_NAME = "records";
-	static final String WPT_TABLE_NAME = "waypints";
-	
+	/**
+	 * Column name for record id.
+	 */
 	public static final String KEY_ID = "_id";
+	/**
+	 * Column name for record profile.
+	 */
 	public static final String KEY_PROFILE = "profile";
+	/**
+	 * Column name for record start time.
+	 */
 	public static final String KEY_START_TIME = "starttime";
+	/**
+	 * Column name for record end time.
+	 */
 	public static final String KEY_END_TIME = "endtime";
+	/**
+	 * Column name for record distance.
+	 */
 	public static final String KEY_DISTANCE = "distance";
-	public static final String KEY_AVARAGE_SPEED = "avaragespeed";
+	/**
+	 * Column name for record average speed.
+	 */
+	public static final String KEY_AVERAGE_SPEED = "averagespeed";
+	/**
+	 * Column name for record comment.
+	 */
 	public static final String KEY_COMMENT = "comment";
 	
-	
+	/**
+	 * Records table name.
+	 */
 	final String TABLE_NAME;
 	
+	/**
+	 * Constructor.
+	 * @param context Context
+	 * @param name Table name (see RecordDBHelper.RECORDS_TABLE_NAME)
+	 * @param factory Cursor factory
+	 * @param version Database version
+	 */
 	public RecordDBHelper(Context context, String name, CursorFactory factory, int version) {
 		super(context, name, factory, version);
 		this.TABLE_NAME = name;
@@ -39,7 +76,7 @@ public class RecordDBHelper extends SQLiteOpenHelper {
 				KEY_START_TIME + 	" INTEGER," +
 				KEY_END_TIME + 		" INTEGER," +
 				KEY_DISTANCE +		" REAL," +
-				KEY_AVARAGE_SPEED + " REAL," +
+				KEY_AVERAGE_SPEED + " REAL," +
 				KEY_COMMENT + 		" TEXT)");
 		
 	}
@@ -50,6 +87,14 @@ public class RecordDBHelper extends SQLiteOpenHelper {
 		onCreate(db);
 	}
 	
+	/**
+	 * Delete record with id or selection. 
+	 * @throws IllegalArgumentException if id is not empty and is not a digit
+	 * @param id Record id
+	 * @param selection Selection
+	 * @param selectionArgs Selection arguments
+	 * @return Deleted rows
+	 */
 	public int delete(String id, String selection, String[] selectionArgs) {
 		if (!TextUtils.isDigitsOnly(id))
 			throw new IllegalArgumentException();
@@ -57,7 +102,7 @@ public class RecordDBHelper extends SQLiteOpenHelper {
 		String whereClause = "";
 		if (!TextUtils.isEmpty(id))
 			if (TextUtils.isDigitsOnly(id))
-				whereClause += KEY_ID + " = " + id + " AND (" + selection  + ")";
+				whereClause += KEY_ID + " = " + id;
 			else 
 				throw new IllegalArgumentException();
 		else 
@@ -67,6 +112,12 @@ public class RecordDBHelper extends SQLiteOpenHelper {
 				whereClause , selectionArgs);
 	}
 	
+	/**
+	 * Insert record into database. 
+	 * @throws IllegalArgumentException if record data is null
+	 * @param values Record data
+	 * @return Record id
+	 */
 	public long insert(ContentValues values) {
 		if (values == null)
 			throw new IllegalArgumentException();
@@ -75,11 +126,21 @@ public class RecordDBHelper extends SQLiteOpenHelper {
 		if (!values.containsKey(KEY_START_TIME)) values.put(KEY_START_TIME, new Date().getTime());
 		if (!values.containsKey(KEY_END_TIME)) values.put(KEY_END_TIME, new Date().getTime()+1);
 		if (!values.containsKey(KEY_DISTANCE)) values.put(KEY_DISTANCE, 0.0);
-		if (!values.containsKey(KEY_AVARAGE_SPEED)) values.put(KEY_AVARAGE_SPEED, 0.0);
+		if (!values.containsKey(KEY_AVERAGE_SPEED)) values.put(KEY_AVERAGE_SPEED, 0.0);
 		if (!values.containsKey(KEY_COMMENT)) values.put(KEY_COMMENT, "no comment");
 		return getWritableDatabase().insert(RECORDS_TABLE_NAME, null, values);
 	}
 	
+	/**
+	 * Query record(s) with id or selection.
+	 * @throws IllegalArgumentException if id is not empty and is not a digit
+	 * @param id Record id
+	 * @param projection Projection 
+	 * @param selection Selection
+	 * @param selectionArgs Selection arguments
+	 * @param sortOrder Sort order
+	 * @return Cursor to record(s)
+	 */
 	public Cursor query(String id, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
 		
@@ -94,6 +155,15 @@ public class RecordDBHelper extends SQLiteOpenHelper {
 				selection, selectionArgs, null, null, sortOrder);
 	}
 	
+	/**
+	 * Update Record with id or selection.
+	 * @throws IllegalArgumentException if id is not empty and is not a digit
+	 * @param id Record id
+	 * @param values Record data
+	 * @param selection Selection
+	 * @param selectionArgs Selection arguments
+	 * @return updated rows
+	 */
 	public int update(String id, ContentValues values, String selection,
 			String[] selectionArgs) {
 		

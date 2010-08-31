@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.sport.tracker.utils.Record;
 import org.sport.tracker.utils.SportTrackerLocationListener;
-import org.sport.tracker.utils.TimeCounteRunnable;
+import org.sport.tracker.utils.TimeCountRunnable;
 import org.sport.tracker.utils.Waypoint;
 
 import android.app.Activity;
@@ -16,10 +16,25 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
+/**
+ * Record activity, create and show new record.
+ * 
+ * @author Waldemar Smirnow
+ *
+ */
 public class RecordUI extends Activity {
 
+	/**
+	 * LocationListener, update database and call updateFields method.
+	 */
 	public SportTrackerLocationListener locationListener;
+	/**
+	 * Selected profile.
+	 */
 	public String profile;
+	/**
+	 * Time counter Runnable, show record time on textview.
+	 */
 	Runnable timeCounter = null;
 
 	/** Called when the activity is first created. */
@@ -36,6 +51,7 @@ public class RecordUI extends Activity {
 			profile = "Other";
 		}
 		
+		// show profile on textview
 		TextView profile_tv = (TextView) findViewById(R.id.tv_profile);
 		profile_tv.setText(profile);
 		profile_tv.postInvalidate();
@@ -50,18 +66,22 @@ public class RecordUI extends Activity {
 			}
 		});
 
+		// let the time textview show record time
 		final TextView tv_time = (TextView) findViewById(R.id.tv_time);
 		long startTime = new Date().getTime();
-		timeCounter = new TimeCounteRunnable(tv_time, startTime);
+		timeCounter = new TimeCountRunnable(tv_time, startTime);
 		tv_time.post(timeCounter);
 		
 		// set LocationListener
 		locationListener = new SportTrackerLocationListener(this, profile, startTime);
 	}
 
+	/**
+	 * Stop record and start RecordInfoUI with recordId and endtime.
+	 */
 	public void recordStop() {
 		final TextView tv_time = (TextView) findViewById(R.id.tv_time);
-		final long endTime = ((TimeCounteRunnable) timeCounter).endTime;
+		final long endTime = ((TimeCountRunnable) timeCounter).endTime;
 		tv_time.removeCallbacks(timeCounter);
 		final long recordId = locationListener.stopRecord(endTime);
 		
@@ -72,6 +92,11 @@ public class RecordUI extends Activity {
 		this.finish();
 	}
 
+	/**
+	 * Update record view fields.
+	 * @param record recorded record
+	 * @param waypoint last waypoint
+	 */
 	public void updateFields(Record record, Waypoint waypoint) {
 
 		if (!this.isFinishing()) {

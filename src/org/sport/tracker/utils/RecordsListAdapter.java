@@ -12,11 +12,29 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+/**
+ * Record ListAdapter. Fill List entries with record data.
+ * 
+ * @author Waldemar Smirnow
+ *
+ */
 public class RecordsListAdapter extends ArrayAdapter<Record> {
 
+	/**
+	 * Context.
+	 */
 	Context context;
+	/**
+	 * List with (record) data.
+	 */
 	List<Record> records;
 	
+	/**
+	 * Constructor.
+	 * @param context Context
+	 * @param textViewResourceId List row layout
+	 * @param records List with records to show
+	 */
 	public RecordsListAdapter(Context context, 
 			int textViewResourceId, List<Record> records) {
 		
@@ -24,7 +42,7 @@ public class RecordsListAdapter extends ArrayAdapter<Record> {
 		this.context = context;
 		this.records = records;
 	}
-	
+
 	@Override
     public View getView(int position, View convertView, ViewGroup parent) {
 		

@@ -17,16 +17,41 @@ import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 
+/**
+ * Map overlay. Show record track on map.
+ * 
+ * @author Waldemar Smirnow
+ *
+ */
 public class WaypointsOverlay extends Overlay {
 
+	/**
+	 * Direction width (latitude).
+	 */
 	public static final int DIRECTION_WIDTH = 0;
+	/**
+	 * Direction height (longtitude).
+	 */
 	public static final int DIRECTION_HEIGHT = 1;
 	
+	/**
+	 * Context.
+	 */
 	Context context;
+	/**
+	 * List with waypoints data.
+	 */
 	List<GeoPoint> waypoints;
+	/**
+	 * Track was drawn (=true).
+	 */
 	boolean drawn = false;
 	
-	
+	/**
+	 * Constructor.
+	 * @param context Context
+	 * @param waypoints Waypoints
+	 */
 	public WaypointsOverlay(Context context, List<GeoPoint> waypoints) {
 		super();
 		this.context = context;
@@ -91,6 +116,12 @@ public class WaypointsOverlay extends Overlay {
 		
     }
 	
+	/**
+	 * Get geopoint with min value given by direction.
+	 * @param waypoints Waypoints
+	 * @param direction Direction (see WaypointsOverlay.DIRECTION_*)
+	 * @return geopoint with min value
+	 */
 	static GeoPoint getMinGeoPoint(List<GeoPoint> waypoints, int direction) {
 		int min = Integer.MAX_VALUE;
 		GeoPoint minWp = null;
@@ -118,6 +149,12 @@ public class WaypointsOverlay extends Overlay {
 		}
 	}
 	
+	/**
+	 * Get geopoint with max value given by direction.
+	 * @param waypoints Waypoints
+	 * @param direction Direction (see WaypointsOverlay.DIRECTION_*)
+	 * @return waypoint with max value
+	 */
 	static GeoPoint getMaxGeoPoint(List<GeoPoint> waypoints, int direction) {
 		int max = Integer.MIN_VALUE;
 		GeoPoint maxWp = null;
@@ -145,6 +182,14 @@ public class WaypointsOverlay extends Overlay {
 		}
 	}
 	
+	/**
+	 * Get central geopoint.
+	 * @param minLatE6 Min Latitude
+	 * @param maxLatE6 Max latitude
+	 * @param minLonE6 Min longtitude
+	 * @param maxLonE6 Max longtitude
+	 * @return Central geopoint
+	 */
 	GeoPoint getCentralGeoPoint(int minLatE6, int maxLatE6, int minLonE6, int maxLonE6) {
 		
 		int centralLat = minLatE6 + ((maxLatE6 - minLatE6) / 2);

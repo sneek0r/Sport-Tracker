@@ -18,8 +18,17 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
+/**
+ * Statistic activity, show total time, avarage speed and  all records from selected profile.
+ *  
+ * @author Waldemar Smirnow
+ *
+ */
 public class StatisticUI extends Activity {
 	
+	/**
+	 * Record profile.
+	 */
 	public String profile;
 	
 	/** Called when the activity is first created. */
@@ -41,11 +50,13 @@ public class StatisticUI extends Activity {
     	profile_tv.setText(profile);
     	profile_tv.postInvalidate();
 
+    	// get all records with selected profile
     	List<Record> records = Record.queryDB(this, RecordDBHelper.KEY_PROFILE + " = '" + profile + "'", 
     			null, RecordDBHelper.KEY_START_TIME);
     	
     	if (records.size() < 1) return;
-
+    	// there are records on this profile
+    	// collect data
     	long totalTime = 0;
     	float distance = 0.0f;
     	float avarageSpeed = 0.0f;
@@ -56,7 +67,7 @@ public class StatisticUI extends Activity {
     	}
     	avarageSpeed /= records.size();
     	
-    	// fill list view
+    	// fill list view with records and set callback
     	ListView lv = (ListView) findViewById(R.id.lv_records);
     	lv.setAdapter(new RecordsListAdapter(lv.getContext(), R.layout.record_row, records));
     	lv.setOnItemClickListener(new OnItemClickListener() {
@@ -67,28 +78,31 @@ public class StatisticUI extends Activity {
 			}
 		});
     	
+    	// fill total time textview
     	TextView tv_time = (TextView) findViewById(R.id.tv_total_time);
     	Date time = new Date(totalTime-TimeZone.getDefault().getOffset(totalTime));
     	SimpleDateFormat dateFormatter = new SimpleDateFormat("HH:mm:ss");
     	tv_time.setText(dateFormatter.format(time));
     	tv_time.postInvalidate();
     	
+    	// fill distance textview
     	TextView tv_distance = (TextView) findViewById(R.id.tv_total_distance);
     	tv_distance.setText(Math.round(distance) + " m");
     	tv_distance.postInvalidate();
     	
+    	// fill avarage speed textview
     	TextView tv_speed = (TextView) findViewById(R.id.tv_total_avarage_speed);
     	tv_speed.setText(Math.round(avarageSpeed) + " m/s");
     	tv_speed.postInvalidate();
     }
     
+    /**
+     * Callback for list items to start RecordInfoUI for selected record.
+     * @param id record id
+     */
     public void startRecordInfoActivity(long id) {
     	Intent recordInfo_intent = new Intent(StatisticUI.this, RecordInfoUI.class);
 		recordInfo_intent.putExtra("id", id);
     	startActivity(recordInfo_intent);
-    }
-    
-    public void onDestroy() {
-    	super.onDestroy();
     }
 }

@@ -6,6 +6,7 @@ import java.util.TimeZone;
 
 import org.sport.tracker.utils.Record;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,11 +15,21 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.android.maps.MapActivity;
-
-public class RecordInfoUI extends MapActivity {
+/**
+ * RecordInfo activity, to show record data.
+ * 
+ * @author Waldemar Smirnow
+ *
+ */
+public class RecordInfoUI extends Activity {
 	
+	/**
+	 * Record ID.
+	 */
 	long recordId = -1;
+	/**
+	 * Record to show.
+	 */
 	Record record;
 	
 	/** Called when the activity is first created. */
@@ -38,6 +49,7 @@ public class RecordInfoUI extends MapActivity {
         		return;
         	}
         	
+        	// get data
     		String profile = 		record.profile;
     		long startTime = 		record.startTime;
     		long endTime = 			record.endTime;
@@ -45,10 +57,12 @@ public class RecordInfoUI extends MapActivity {
     		float avarageSpeed = 	record.avarageSpeed;
     		String comment = 		record.comment;
         	
+    		// fill profile textview
         	TextView profile_tv = (TextView) findViewById(R.id.tv_profile);
         	profile_tv.setText(profile);
         	profile_tv.postInvalidate();
 
+        	// fill recorded time textview
         	TextView time_tv = (TextView) findViewById(R.id.tv_time);
         	long timeSpan = endTime - startTime;
         	Date time = new Date(timeSpan-TimeZone.getDefault().getOffset(timeSpan));
@@ -56,18 +70,22 @@ public class RecordInfoUI extends MapActivity {
         	time_tv.setText(dateFormatter.format(time));
         	time_tv.postInvalidate();
             
+        	// fill distance textview
         	TextView distance_tv = (TextView) findViewById(R.id.tv_distance);
         	distance_tv.setText(Math.round(distance) + " m");
         	distance_tv.postInvalidate();
         
+        	// fill avarage speed textview
         	TextView avarage_speed_tv = (TextView) findViewById(R.id.tv_avarage_speed);
         	avarage_speed_tv.setText(Math.round(avarageSpeed) + " m/s");
         	avarage_speed_tv.postInvalidate();
         	
+        	// fill comment textview
         	TextView comment_tv = (TextView) findViewById(R.id.tv_comment);
         	comment_tv.setText(comment);
         	comment_tv.postInvalidate();
         	
+        	// add handler, to show record on map
         	Button button_showMap = (Button) findViewById(R.id.bt_show_on_map);
         	button_showMap.setOnClickListener( new OnClickListener() {
 				
@@ -78,12 +96,10 @@ public class RecordInfoUI extends MapActivity {
 			});
         }
     }
-
-	@Override
-	protected boolean isRouteDisplayed() {
-		return false;
-	}
 	
+    /**
+     * Start MapUI activity with shown record (id).
+     */
 	public void startMapActivity() {
 		Intent mapIntent = new Intent(RecordInfoUI.this, MapUI.class);
 		mapIntent.putExtra("id", recordId);

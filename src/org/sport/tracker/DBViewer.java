@@ -8,7 +8,13 @@ import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.widget.TextView;
 
+/**
+ * Test view to show database content.
+ * 
+ * @author Waldemar Smirnow
+ */
 public class DBViewer extends Activity {
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {

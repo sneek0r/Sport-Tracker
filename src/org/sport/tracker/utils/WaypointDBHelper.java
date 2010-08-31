@@ -10,21 +10,64 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.text.TextUtils;
 
+/**
+ * Waypoints database helper. Provide Waypoint CRUD functions.
+ * 
+ * @author Waldemar Smirnow
+ *
+ */
 public class WaypointDBHelper extends SQLiteOpenHelper {
 
+	/**
+	 * Static waypoints table name (should be used for constructor).
+	 */
 	public static final String WAYPOINT_TABLE_NAME = "waypoints";
 	
+	/**
+	 * Column name for waypoint id.
+	 */
 	public static final String KEY_ID = "_id";
+	/**
+	 * Column name for record id.
+	 */
 	public static final String KEY_RECORD_ID = "recordID";
+	/**
+	 * Column name for waypoint latitude.
+	 */
 	public static final String KEY_LATITUDE = "latitude";
+	/**
+	 * Column name for waypoint longtitude.
+	 */
 	public static final String KEY_LONGTITUDE = "longtitude";
+	/**
+	 * Column name for waypoint altitude.
+	 */
 	public static final String KEY_ALTITUDE = "altitude";
+	/**
+	 * Column name for waypoint accuracy.
+	 */
 	public static final String KEY_ACCURACY = "accuracy";
+	/**
+	 * Column name for waypoint time.
+	 */
 	public static final String KEY_TIME = "time";
+	/**
+	 * Column name for waypoint speed.
+	 */
 	public static final String KEY_SPEED = "speed";
 	
+	/**
+	 * Waypoints table name.
+	 */
 	final String TABLE_NAME;
-	
+
+	/**
+	 * Constructor.
+	 * @param context Context
+	 * @param name Table name
+	 * @param factory Cursor factory
+	 * @param version Database version.
+	 */
 	public WaypointDBHelper(Context context, String name,
 			CursorFactory factory, int version) {
 		
@@ -51,6 +94,14 @@ public class WaypointDBHelper extends SQLiteOpenHelper {
 		onCreate(db);
 	}
 	
+	/**
+	 * Delete waypoint with id or selection.
+	 * @throws IllegalArgumentException if id is not empty and is not a digit
+	 * @param id Waypoint id
+	 * @param selection Selection
+	 * @param selectionArgs Selection arguments
+	 * @return rows deleted
+	 */
 	public int delete(String id, String selection, String[] selectionArgs) {
 		if (!TextUtils.isEmpty(id) && !TextUtils.isDigitsOnly(id))
 			throw new IllegalArgumentException();
@@ -61,8 +112,15 @@ public class WaypointDBHelper extends SQLiteOpenHelper {
 			return getWritableDatabase().delete(TABLE_NAME, selection , selectionArgs);
 	}
 	
+	/**
+	 * Insert Waypoint into database.
+	 * @throws IllegalArgumentException if record id (from values) is not empty or is not a digit
+	 * @param values Waypoint data
+	 * @return Waypoint id
+	 */
 	public long insert(ContentValues values) {
-		if (TextUtils.isEmpty(values.getAsString(KEY_RECORD_ID)) || !TextUtils.isDigitsOnly(values.getAsString(KEY_RECORD_ID)))
+		if (TextUtils.isEmpty(values.getAsString(KEY_RECORD_ID)) || 
+				!TextUtils.isDigitsOnly(values.getAsString(KEY_RECORD_ID)))
 			throw new IllegalArgumentException();
 		
 		if (!values.containsKey(KEY_LATITUDE)) values.put(KEY_LATITUDE, 0.0);
@@ -75,6 +133,16 @@ public class WaypointDBHelper extends SQLiteOpenHelper {
 		return getWritableDatabase().insert(TABLE_NAME, null, values);
 	}
 	
+	/**
+	 * Query Waypoint(s) with id or selection.
+	 * @throws IllegalArgumentException if id is not empty and is not a digit
+	 * @param waypointId Waypoint id
+	 * @param projection Projection
+	 * @param selection Selection
+	 * @param selectionArgs Selection arguments
+	 * @param sortOrder Sort order
+	 * @return Cursor to waypoint(s)
+	 */
 	public Cursor query(String waypointId, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
 		
@@ -89,6 +157,15 @@ public class WaypointDBHelper extends SQLiteOpenHelper {
 				selection, selectionArgs, null, null, sortOrder);
 	}
 	
+	/**
+	 * Update waypoint with id or selection.
+	 * @throws IllegalArgumentException if id is not empty and is not a digit
+	 * @param waypointId Waypoint id
+	 * @param values Waypoint data
+	 * @param selection Selection
+	 * @param selectionArgs Selection arguments
+	 * @return updated rows
+	 */
 	public int update(String waypointId, ContentValues values, String selection,
 			String[] selectionArgs) {
 
