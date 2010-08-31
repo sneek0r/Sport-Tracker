@@ -26,7 +26,7 @@ public class RecordInfoUI extends Activity {
 	/**
 	 * Record ID.
 	 */
-	long recordId = -1;
+	long recordId = 0;
 	/**
 	 * Record to show.
 	 */
@@ -85,9 +85,19 @@ public class RecordInfoUI extends Activity {
         	comment_tv.setText(comment);
         	comment_tv.postInvalidate();
         	
+        	// add handler, to delete record
+        	Button bt_delete_reord = (Button) findViewById(R.id.bt_delete_record);
+        	bt_delete_reord.setOnClickListener( new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					deleteReord();
+				}
+			});
+        	
         	// add handler, to show record on map
-        	Button button_showMap = (Button) findViewById(R.id.bt_show_on_map);
-        	button_showMap.setOnClickListener( new OnClickListener() {
+        	Button bt_show_map = (Button) findViewById(R.id.bt_show_on_map);
+        	bt_show_map.setOnClickListener( new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
@@ -95,6 +105,15 @@ public class RecordInfoUI extends Activity {
 				}
 			});
         }
+    }
+    
+    /**
+     * Delete record and close activity.
+     */
+    public void deleteReord() {
+    	if (Record.deleteDB(this, recordId)) {
+    		this.finish();
+    	}
     }
 	
     /**

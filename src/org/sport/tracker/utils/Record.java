@@ -226,7 +226,10 @@ public class Record {
 		
 		List<Record> records = new ArrayList<Record>();
 		
-		if (cursor.getCount() < 1) return records;
+		if (cursor.getCount() < 1) {
+			cursor.close();
+			return records;
+		}
 		cursor.moveToFirst();
 		
 		while (!cursor.isAfterLast()) {

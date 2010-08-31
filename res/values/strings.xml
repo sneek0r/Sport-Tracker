@@ -40,4 +40,5 @@
 <string name="api_key">0H-oqoymL2uebSgkEvg8nfm4aAOhA0P-Cic_t9Q</string>
 <string name="comment">Comment:</string>
 <string name="no_comment">no comment</string>
+<string name="delete_record">Delete record</string>
 </resources>

@@ -167,7 +167,10 @@ public class Waypoint {
 		
 		List<Waypoint> waypoints = new ArrayList<Waypoint>();
 		
-		if (cursor.getCount() < 1) return waypoints;
+		if (cursor.getCount() < 1) {
+			cursor.close();
+			return waypoints;
+		}
 		
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {

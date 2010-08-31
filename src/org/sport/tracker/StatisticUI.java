@@ -49,12 +49,20 @@ public class StatisticUI extends Activity {
         TextView profile_tv = (TextView) findViewById(R.id.tv_profile);
     	profile_tv.setText(profile);
     	profile_tv.postInvalidate();
-
+    }
+    
+    /**
+     * Activity onStart method. fill UI fields with data.
+     */
+    @Override
+    protected void onStart() {
+    	super.onStart();
+    	
     	// get all records with selected profile
     	List<Record> records = Record.queryDB(this, RecordDBHelper.KEY_PROFILE + " = '" + profile + "'", 
     			null, RecordDBHelper.KEY_START_TIME);
     	
-    	if (records.size() < 1) return;
+//    	if (records.size() < 1) return;
     	// there are records on this profile
     	// collect data
     	long totalTime = 0;
