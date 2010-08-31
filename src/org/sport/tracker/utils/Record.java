@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.sport.tracker.RecordProvider;
+import org.sport.tracker.SportTrackerProvider;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -45,9 +45,9 @@ public class Record {
 	 */
 	public long endTime;
 	/**
-	 * Record avarage speed (m/s).
+	 * Record average speed (m/s).
 	 */
-	public float avarageSpeed = 0f;
+	public float averageSpeed = 0f;
 	/**
 	 * Record distance (m).
 	 */
@@ -91,7 +91,7 @@ public class Record {
 	
 	/**
 	 * Convert location to Waypoint, add it to waypoint list 
-	 * and update other fields like distance and avarage speed.
+	 * and update other fields like distance and average speed.
 	 * 
 	 * @param location Location
 	 * @return true if success
@@ -102,7 +102,7 @@ public class Record {
 			endTime = new Date().getTime();
 			if(lastLoc != null){
 				distance += lastLoc.distanceTo(location); 
-				avarageSpeed = distance / ((endTime - startTime) / 1000);
+				averageSpeed = distance / ((endTime - startTime) / 1000);
 			}
 			lastLoc = location;
 			return 1 == updateDB();
@@ -146,7 +146,7 @@ public class Record {
 		ContentValues values = new ContentValues();
 		values.put(RecordDBHelper.KEY_PROFILE, profile);
 		values.put(RecordDBHelper.KEY_START_TIME, startTime);
-		recordUrl = resolver.insert(RecordProvider.RECORD_CONTENT_URI, values);
+		recordUrl = resolver.insert(SportTrackerProvider.RECORD_CONTENT_URI, values);
 		recordId = Long.parseLong(recordUrl.getPathSegments().get(1));
 		return recordUrl;
 	}
@@ -162,7 +162,7 @@ public class Record {
 		values.put(RecordDBHelper.KEY_START_TIME, startTime);
 		values.put(RecordDBHelper.KEY_END_TIME, endTime);
 		values.put(RecordDBHelper.KEY_DISTANCE, distance);
-		values.put(RecordDBHelper.KEY_AVERAGE_SPEED, avarageSpeed);
+		values.put(RecordDBHelper.KEY_AVERAGE_SPEED, averageSpeed);
 		values.put(RecordDBHelper.KEY_COMMENT, comment);
 		if (recordUrl == null) insertDB();
 		return resolver.update(recordUrl, values, null, null);
@@ -177,7 +177,7 @@ public class Record {
 	 */
 	public static Record queryDB(Context context, long recordId) {
 		ContentResolver resolver = context.getContentResolver();
-		Uri url = Uri.withAppendedPath(RecordProvider.RECORD_CONTENT_URI, ""+recordId);
+		Uri url = Uri.withAppendedPath(SportTrackerProvider.RECORD_CONTENT_URI, ""+recordId);
 		Cursor cursor =  resolver.query(url, null, null, null, null);
 		
 		if (cursor.getCount() != 1) throw new IllegalArgumentException();
@@ -188,7 +188,7 @@ public class Record {
 		final String profile = cursor.getString(cursor.getColumnIndex(RecordDBHelper.KEY_PROFILE));
 		long startTime = cursor.getLong(cursor.getColumnIndex(RecordDBHelper.KEY_START_TIME));
 		long endTime = cursor.getLong(cursor.getColumnIndex(RecordDBHelper.KEY_END_TIME));
-		float avarageSpeed = cursor.getFloat(cursor.getColumnIndex(RecordDBHelper.KEY_AVERAGE_SPEED));
+		float averageSpeed = cursor.getFloat(cursor.getColumnIndex(RecordDBHelper.KEY_AVERAGE_SPEED));
 		float distance = cursor.getFloat(cursor.getColumnIndex(RecordDBHelper.KEY_DISTANCE));
 		String comment = cursor.getString(cursor.getColumnIndex(RecordDBHelper.KEY_COMMENT));
 		cursor.close();
@@ -198,7 +198,7 @@ public class Record {
 		record.recordUrl = url;
 		record.startTime = startTime;
 		record.endTime = endTime;
-		record.avarageSpeed = avarageSpeed;
+		record.averageSpeed = averageSpeed;
 		record.distance = distance;
 		record.comment = comment;
 		record.waypoints = Waypoint.queryDB(context, recordId, 
@@ -219,7 +219,7 @@ public class Record {
 			String selection, String[] selectionArgs, String sortOrder) {
 		
 		ContentResolver resolver = context.getContentResolver();
-		Cursor cursor = resolver.query(RecordProvider.RECORD_CONTENT_URI, 
+		Cursor cursor = resolver.query(SportTrackerProvider.RECORD_CONTENT_URI, 
 				new String[] {
 					RecordDBHelper.KEY_ID
 				}, selection, selectionArgs, sortOrder);
@@ -248,7 +248,7 @@ public class Record {
 		ContentResolver resolver = context.getContentResolver();
 		
 		if (resolver.delete(
-				Uri.withAppendedPath(RecordProvider.RECORD_CONTENT_URI, ""+recordId),
+				Uri.withAppendedPath(SportTrackerProvider.RECORD_CONTENT_URI, ""+recordId),
 				null, null) == 1) {
 			
 			Waypoint.deleteDB(context, recordId, null, null);

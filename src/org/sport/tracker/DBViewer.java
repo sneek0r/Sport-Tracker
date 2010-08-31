@@ -25,7 +25,7 @@ public class DBViewer extends Activity {
         tv.setMovementMethod(ScrollingMovementMethod.getInstance());
         
         ContentResolver resolver = getContentResolver();
-        Cursor c = resolver.query(RecordProvider.RECORD_CONTENT_URI, null, null, null, null);
+        Cursor c = resolver.query(SportTrackerProvider.RECORD_CONTENT_URI, null, null, null, null);
         String text = "Records:\n";
         
         c.moveToFirst();
@@ -38,7 +38,7 @@ public class DBViewer extends Activity {
         }
         c.close();
         
-        c = resolver.query(Uri.withAppendedPath(RecordProvider.WAYPOINT_CONTENT_URI, "0"), null, null, null, null);
+        c = resolver.query(Uri.withAppendedPath(SportTrackerProvider.WAYPOINT_CONTENT_URI, "0"), null, null, null, null);
         text += "\nWaypoints:\n";
         
         c.moveToFirst();

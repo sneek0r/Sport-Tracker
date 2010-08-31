@@ -54,7 +54,7 @@ public class RecordInfoUI extends Activity {
     		long startTime = 		record.startTime;
     		long endTime = 			record.endTime;
     		float distance =		record.distance;
-    		float avarageSpeed = 	record.avarageSpeed;
+    		float avarageSpeed = 	record.averageSpeed;
     		String comment = 		record.comment;
         	
     		// fill profile textview
@@ -76,7 +76,7 @@ public class RecordInfoUI extends Activity {
         	distance_tv.postInvalidate();
         
         	// fill avarage speed textview
-        	TextView avarage_speed_tv = (TextView) findViewById(R.id.tv_avarage_speed);
+        	TextView avarage_speed_tv = (TextView) findViewById(R.id.tv_average_speed);
         	avarage_speed_tv.setText(Math.round(avarageSpeed) + " m/s");
         	avarage_speed_tv.postInvalidate();
         	

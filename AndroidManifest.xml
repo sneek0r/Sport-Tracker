@@ -45,7 +45,7 @@
 			</intent-filter>
 		</activity>
 		
-		<provider android:name=".RecordProvider" android:authorities="org.sport.tracker" /> 
+		<provider android:name=".SportTrackerProvider" android:authorities="org.sport.tracker" /> 
 
 		<uses-library android:name="com.google.android.maps" />
 	</application>

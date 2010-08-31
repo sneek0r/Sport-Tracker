@@ -107,7 +107,7 @@ public class RecordUI extends Activity {
 			final float accuracy = 		waypoint.accuracy;
 			final float speed = 		waypoint.speed;
 			float distance = 			record.distance;
-			float avarageSpeed = 		record.avarageSpeed;
+			float avarageSpeed = 		record.averageSpeed;
 			
 			TextView tv_latitude = (TextView) findViewById(R.id.tv_lat);
 			tv_latitude.setText(Location.convert(latitude,
@@ -131,7 +131,7 @@ public class RecordUI extends Activity {
 			tv_speed.setText(Math.round(speed) + " m/s");
 			tv_speed.postInvalidate();
 
-			TextView tv_avarage_speed = (TextView) findViewById(R.id.tv_avarage_speed);
+			TextView tv_avarage_speed = (TextView) findViewById(R.id.tv_average_speed);
 			tv_avarage_speed.setText(Math.round(avarageSpeed) + " m/s");
 			tv_avarage_speed.postInvalidate();
 

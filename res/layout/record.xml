@@ -69,12 +69,12 @@
 		
 		<TableRow android:paddingTop="3dp">
 			<TextView 
-				android:id="@+id/tv_avarage_speed_static" 
+				android:id="@+id/tv_average_speed_static" 
 				android:textSize="16dp"
-				android:text="@string/avarage_speed" />
+				android:text="@string/average_speed" />
 	
 			<TextView 
-				android:id="@+id/tv_avarage_speed" 
+				android:id="@+id/tv_average_speed" 
 				android:gravity="right"
 				android:textSize="16dp"
 				android:text="@string/zero_speed" />

@@ -1,7 +1,5 @@
 package org.sport.tracker;
 
-
-
 import org.sport.tracker.utils.RecordDBHelper;
 import org.sport.tracker.utils.WaypointDBHelper;
 
@@ -13,15 +11,42 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
-public class RecordProvider extends ContentProvider {
+/**
+ * ContentProvider for records and waypoints.
+ * 
+ * @author Waldemar Smirnow
+ *
+ */
+public class SportTrackerProvider extends ContentProvider {
 
+	/**
+	 * Record content uri.
+	 */
 	public static final Uri RECORD_CONTENT_URI = Uri.parse("content://org.sport.tracker/records");
+	/**
+	 * Waypoint content uri.
+	 */
 	public static final Uri WAYPOINT_CONTENT_URI = Uri.parse("content://org.sport.tracker/waypoints");
-	public static final int RECORDS = 0;
-	public static final int RECORD_ID = 1;
-	public static final int WAYPOINTS = 2;
-	public static final int WAYPOINT_ID = 3;
-	private static final UriMatcher uriMatcher;
+	/**
+	 * Records id for uri matcher.
+	 */
+	static final int RECORDS = 0;
+	/**
+	 * Record id for uri matcher.
+	 */
+	static final int RECORD_ID = 1;
+	/**
+	 * Waypoints id for uri matcher.
+	 */
+	static final int WAYPOINTS = 2;
+	/**
+	 * Waypoint id for uri matcher.
+	 */
+	static final int WAYPOINT_ID = 3;
+	/**
+	 * Uri matcher.
+	 */
+	static final UriMatcher uriMatcher;
 	static {
 		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 		uriMatcher.addURI("org.sport.tracker", "records", RECORDS);
@@ -30,13 +55,19 @@ public class RecordProvider extends ContentProvider {
 		uriMatcher.addURI("org.sport.tracker", "waypoints/#/#", WAYPOINT_ID);
 	}
 
+	/**
+	 * Record database helper.
+	 */
 	private RecordDBHelper recordDbHelper;
+	/**
+	 * Waypoint database helper.
+	 */
 	private WaypointDBHelper waypointDbHelber;
 	
 	@Override
 	public boolean onCreate() {
-		recordDbHelper = new RecordDBHelper(getContext(), RecordDBHelper.RECORDS_TABLE_NAME, null, 2);
-		waypointDbHelber = new WaypointDBHelper(getContext(), WaypointDBHelper.WAYPOINT_TABLE_NAME, null, 2);
+		recordDbHelper = new RecordDBHelper(getContext(), RecordDBHelper.RECORDS_TABLE_NAME, null, 1);
+		waypointDbHelber = new WaypointDBHelper(getContext(), WaypointDBHelper.WAYPOINT_TABLE_NAME, null, 1);
 		return recordDbHelper.getWritableDatabase() == null ||
 				waypointDbHelber.getWritableDatabase() == null ? false : true;
 	}

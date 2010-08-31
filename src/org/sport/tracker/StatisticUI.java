@@ -59,13 +59,13 @@ public class StatisticUI extends Activity {
     	// collect data
     	long totalTime = 0;
     	float distance = 0.0f;
-    	float avarageSpeed = 0.0f;
+    	float averageSpeed = 0.0f;
     	for (Record record : records) {
     		totalTime += record.endTime - record.startTime;
     		distance += record.distance;
-    		avarageSpeed += record.avarageSpeed;
+    		averageSpeed += record.averageSpeed;
     	}
-    	avarageSpeed /= records.size();
+    	averageSpeed /= records.size();
     	
     	// fill list view with records and set callback
     	ListView lv = (ListView) findViewById(R.id.lv_records);
@@ -90,9 +90,9 @@ public class StatisticUI extends Activity {
     	tv_distance.setText(Math.round(distance) + " m");
     	tv_distance.postInvalidate();
     	
-    	// fill avarage speed textview
-    	TextView tv_speed = (TextView) findViewById(R.id.tv_total_avarage_speed);
-    	tv_speed.setText(Math.round(avarageSpeed) + " m/s");
+    	// fill average speed textview
+    	TextView tv_speed = (TextView) findViewById(R.id.tv_total_average_speed);
+    	tv_speed.setText(Math.round(averageSpeed) + " m/s");
     	tv_speed.postInvalidate();
     }
     

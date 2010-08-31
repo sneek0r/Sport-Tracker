@@ -3,7 +3,7 @@ package org.sport.tracker.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.sport.tracker.RecordProvider;
+import org.sport.tracker.SportTrackerProvider;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -111,7 +111,7 @@ public class Waypoint {
 		values.put(WaypointDBHelper.KEY_ACCURACY, accuracy);
 		values.put(WaypointDBHelper.KEY_TIME, time);
 		waypointUrl = resolver.insert(Uri.withAppendedPath(
-				RecordProvider.WAYPOINT_CONTENT_URI, ""+recordId), values);
+				SportTrackerProvider.WAYPOINT_CONTENT_URI, ""+recordId), values);
 		waypointId = Long.parseLong(waypointUrl.getPathSegments().get(2));
 		return waypointId;
 	}
@@ -127,7 +127,7 @@ public class Waypoint {
 		
 		ContentResolver resolver = context.getContentResolver();
 		Uri url = Uri.withAppendedPath(
-				RecordProvider.WAYPOINT_CONTENT_URI, ""+recordId+"/"+waypointId);
+				SportTrackerProvider.WAYPOINT_CONTENT_URI, ""+recordId+"/"+waypointId);
 		
 		Cursor cursor = resolver.query(url, null, null, null, null);
 		
@@ -162,7 +162,7 @@ public class Waypoint {
 		
 		ContentResolver resolver = context.getContentResolver();
 		Cursor cursor =  resolver.query(Uri.withAppendedPath(
-				RecordProvider.WAYPOINT_CONTENT_URI, ""+recordId),
+				SportTrackerProvider.WAYPOINT_CONTENT_URI, ""+recordId),
 				null, selection, selectionArgs, sortOrder);
 		
 		List<Waypoint> waypoints = new ArrayList<Waypoint>();
@@ -173,7 +173,7 @@ public class Waypoint {
 		while (!cursor.isAfterLast()) {
 			long waypointId = cursor.getLong(cursor.getColumnIndex(WaypointDBHelper.KEY_ID));
 			recordId = cursor.getLong(cursor.getColumnIndex(WaypointDBHelper.KEY_RECORD_ID));
-			Uri waypoinUrl = Uri.withAppendedPath(RecordProvider.WAYPOINT_CONTENT_URI, ""+recordId+"/"+waypointId);
+			Uri waypoinUrl = Uri.withAppendedPath(SportTrackerProvider.WAYPOINT_CONTENT_URI, ""+recordId+"/"+waypointId);
 			final double altitude = cursor.getDouble(cursor.getColumnIndex(WaypointDBHelper.KEY_ALTITUDE));
 			final double latitude = cursor.getDouble(cursor.getColumnIndex(WaypointDBHelper.KEY_LATITUDE));
 			final double longtitude = cursor.getDouble(cursor.getColumnIndex(WaypointDBHelper.KEY_LONGTITUDE));
@@ -205,7 +205,7 @@ public class Waypoint {
 		
 		ContentResolver resolver = context.getContentResolver();
 		return resolver.delete(Uri.withAppendedPath(
-				RecordProvider.WAYPOINT_CONTENT_URI, ""+recordId+"/"+waypointId),
+				SportTrackerProvider.WAYPOINT_CONTENT_URI, ""+recordId+"/"+waypointId),
 				null, null);
 	}
 	
@@ -221,7 +221,7 @@ public class Waypoint {
 		
 		ContentResolver resolver = context.getContentResolver();
 		return resolver.delete(Uri.withAppendedPath(
-				RecordProvider.WAYPOINT_CONTENT_URI, ""+recordId),
+				SportTrackerProvider.WAYPOINT_CONTENT_URI, ""+recordId),
 				where, selectionArgs);
 	}
 }
