@@ -87,14 +87,14 @@ public class WaypointsOverlay extends Overlay {
 				paint.setAntiAlias(true);
 				canvas.drawPath(path, paint);
 				
-				Bitmap flagStart = BitmapFactory.decodeResource(context.getResources(), R.drawable.flag_red);
-				Bitmap flagEnd = BitmapFactory.decodeResource(context.getResources(), R.drawable.flag_green);
+				Bitmap flagStart = BitmapFactory.decodeResource(context.getResources(), R.drawable.start_flag);
+				Bitmap flagEnd = BitmapFactory.decodeResource(context.getResources(), R.drawable.finish_flag);
 				
 				mapView.getProjection().toPixels(waypoints.get(0), point);
-				canvas.drawBitmap(flagStart, point.x, point.y - flagEnd.getHeight(), null);
+				canvas.drawBitmap(flagStart, point.x - (flagStart.getWidth() / 2), point.y - flagEnd.getHeight(), null);
 		
 				mapView.getProjection().toPixels(waypoints.get(waypoints.size()-1), point);
-				canvas.drawBitmap(flagEnd, point.x, point.y - flagEnd.getHeight(), null);
+				canvas.drawBitmap(flagEnd, point.x - (flagStart.getWidth() / 2), point.y - flagEnd.getHeight(), null);
 			} else {
 				// TODO paint flag shadow
 			}

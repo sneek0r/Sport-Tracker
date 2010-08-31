@@ -73,6 +73,9 @@ public class SportTrackerLocationListener implements LocationListener {
 	@Override
 	public void onLocationChanged(Location location) {
 		
+		// drop if accuracy > 10m
+		if (location.getAccuracy() > 10f) return;
+		
 		if (record.addWaypoint(location)) {
 			if (context instanceof RecordUI) {
 				((RecordUI) context).updateFields(

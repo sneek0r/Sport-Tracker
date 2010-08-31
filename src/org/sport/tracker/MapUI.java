@@ -51,7 +51,7 @@ public class MapUI extends MapActivity {
     		
         	// fill map with waypoints
     		MapView mapView= (MapView) findViewById(R.id.map_view);
-//    		mapView.setBuiltInZoomControls(true);
+    		mapView.setBuiltInZoomControls(true);
     		mapView.getOverlays().add(new WaypointsOverlay(mapView.getContext(), points));
         }
 	}

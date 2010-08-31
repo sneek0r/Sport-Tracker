@@ -81,9 +81,9 @@ public class RecordInfoUI extends Activity {
         	avarage_speed_tv.postInvalidate();
         	
         	// fill comment textview
-        	TextView comment_tv = (TextView) findViewById(R.id.tv_comment);
-        	comment_tv.setText(comment);
-        	comment_tv.postInvalidate();
+//        	TextView comment_tv = (TextView) findViewById(R.id.tv_comment);
+//        	comment_tv.setText(comment);
+//        	comment_tv.postInvalidate();
         	
         	// add handler, to delete record
         	Button bt_delete_reord = (Button) findViewById(R.id.bt_delete_record);

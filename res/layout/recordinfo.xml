@@ -68,7 +68,7 @@
 				android:text="@string/zero_speed" />
 		</TableRow>
 		
-		<TableRow android:paddingTop="3dp">
+		<!-- TableRow android:paddingTop="3dp">
 			<TextView 
 				android:id="@+id/tv_comment_static" 
 				android:textSize="16dp"
@@ -78,7 +78,7 @@
 				android:id="@+id/tv_comment" 
 				android:gravity="right"
 				android:textSize="16dp" />
-		</TableRow>
+		</TableRow -->
 	</TableLayout>
 	
 	<View
