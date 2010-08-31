@@ -1,7 +1,9 @@
 package org.sport.tracker;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import org.sport.tracker.utils.Waypoint;
 import org.sport.tracker.utils.WaypointDBHelper;
 import org.sport.tracker.utils.WaypointsOverlay;
 
@@ -18,7 +20,6 @@ import com.google.android.maps.MapView;
 public class MapUI extends MapActivity {
 
 	long recordId;
-	Cursor cursor;
 	
 	/** Called when the activity is first created. */
     @Override
@@ -30,25 +31,16 @@ public class MapUI extends MapActivity {
         if( extras.containsKey("id") ) {
         	recordId = extras.getLong("id");
         	
-        	ContentResolver resolver = getContentResolver();
-        	cursor = resolver.query(Uri.parse(RecordProvider.WAYPOINT_CONTENT_URI + "/" + recordId), 
-        			null, null, null, WaypointDBHelper.KEY_TIME);
+        	List<Waypoint> waypoints = Waypoint.queryDB(this, recordId, null, null, WaypointDBHelper.KEY_TIME);
+        	ArrayList<GeoPoint> points = new ArrayList<GeoPoint>(waypoints.size());
         	
-        	ArrayList<GeoPoint> points = new ArrayList<GeoPoint>(cursor.getCount());
-        	if (cursor.getCount() < 1) {
-        		Log.d(getClass().getName().toString(), "record with id "+ recordId + " has no waypoints");
-        		return;
+        	for (Waypoint wp : waypoints) {
+        		GeoPoint geopoint = new GeoPoint(
+        				(int) (wp.latitude * 1E6),
+        				(int) (wp.longtitude * 1E6));
+        		
+        		points.add(geopoint);
         	}
-        	cursor.moveToFirst();
-    		while (!cursor.isAfterLast()) {
-    			GeoPoint point= new GeoPoint(
-    					(int)(cursor.getDouble(cursor.getColumnIndex(WaypointDBHelper.KEY_LATITUDE)) * 1E6),
-    					(int)(cursor.getDouble(cursor.getColumnIndex(WaypointDBHelper.KEY_LONGTITUDE)) * 1E6));
-    			
-    			points.add(point);
-    			cursor.moveToNext();
-    		}
-    		cursor.close();
     		
     		MapView mapView= (MapView) findViewById(R.id.map_view);
 //    		mapView.setBuiltInZoomControls(true);
