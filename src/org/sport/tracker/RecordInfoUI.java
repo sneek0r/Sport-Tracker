@@ -7,13 +7,19 @@ import java.util.TimeZone;
 import org.sport.tracker.utils.Record;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * RecordInfo activity, to show record data.
@@ -31,6 +37,14 @@ public class RecordInfoUI extends Activity {
 	 * Record to show.
 	 */
 	Record record;
+	/**
+	 * Delete Record dialog id.
+	 */
+	static final int DELETE_DIALOG_ID = 0;
+	/**
+	 * Comment dialog id.
+	 */
+	static final int COMMENT_DIALOG_ID = 1;
 	
 	/** Called when the activity is first created. */
     @Override
@@ -91,7 +105,7 @@ public class RecordInfoUI extends Activity {
 				
 				@Override
 				public void onClick(View v) {
-					deleteReord();
+					showDialog(DELETE_DIALOG_ID);
 				}
 			});
         	
@@ -115,6 +129,11 @@ public class RecordInfoUI extends Activity {
     		this.finish();
     	}
     }
+    
+    public boolean saveComment(String comment) {
+    	record.comment = comment;
+    	return record.updateDB() == 1;
+    }
 	
     /**
      * Start MapUI activity with shown record (id).
@@ -124,4 +143,56 @@ public class RecordInfoUI extends Activity {
 		mapIntent.putExtra("id", recordId);
 		startActivity(mapIntent);
 	}
+	
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		final Dialog dialog;
+		switch (id) {
+		case DELETE_DIALOG_ID:
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage(getString(R.string.sure_to_delete_record))
+			       .setCancelable(true)
+			       .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+			           public void onClick(DialogInterface dialog, int id) {
+			                RecordInfoUI.this.deleteReord();
+			           }
+			       });
+			dialog = builder.create();
+			break;
+			
+		case COMMENT_DIALOG_ID:
+			dialog = new Dialog(this);
+			dialog.setContentView(R.layout.comment_dialog);
+			dialog.setTitle(R.string.comment_dialog);
+			dialog.setCancelable(true);
+			Button bt_cancel = (Button) findViewById(R.id.bt_cancel);
+			bt_cancel.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					dialog.cancel();
+				}
+			});
+			
+			Button bt_save = (Button) findViewById(R.id.bt_comment_save);
+			bt_save.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					Editable comment = ((EditText)findViewById(R.id.ev_enter_comment)).getText();
+					if (RecordInfoUI.this.saveComment(comment.toString())) {
+						dialog.cancel();
+					} else {
+						Toast.makeText(RecordInfoUI.this, "Can't save comment, please try again!", 3);
+					}
+				}
+			});
+			break;
+			
+		default:
+			throw new IllegalArgumentException();
+		}
+		return dialog;
+	}
+
 }

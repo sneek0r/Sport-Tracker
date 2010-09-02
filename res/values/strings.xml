@@ -41,4 +41,9 @@
 <string name="comment">Comment:</string>
 <string name="no_comment">no comment</string>
 <string name="delete_record">Delete record</string>
+<string name="sure_to_delete_record">Are you sure you want delete this Record?</string>
+<string name="enter_comment">Enter your record comment here:</string>
+<string name="comment_dialog">Enter comment</string>
+<string name="save_comment">Save</string>
+<string name="cancel">Cancel</string>
 </resources>

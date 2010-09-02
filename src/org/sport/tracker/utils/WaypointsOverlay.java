@@ -17,6 +17,7 @@ import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 
+
 /**
  * Map overlay. Show record track on map.
  * 
