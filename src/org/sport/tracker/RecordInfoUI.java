@@ -69,7 +69,6 @@ public class RecordInfoUI extends Activity {
     		long endTime = 			record.endTime;
     		float distance =		record.distance;
     		float avarageSpeed = 	record.averageSpeed;
-    		String comment = 		record.comment;
         	
     		// fill profile textview
         	TextView profile_tv = (TextView) findViewById(R.id.tv_profile);
@@ -95,9 +94,7 @@ public class RecordInfoUI extends Activity {
         	avarage_speed_tv.postInvalidate();
         	
         	// fill comment textview
-        	TextView comment_tv = (TextView) findViewById(R.id.tv_comment);
-        	comment_tv.setText(comment);
-        	comment_tv.postInvalidate();
+        	updateCommentView();
         	
         	// add handler, to delete record
         	Button bt_delete_reord = (Button) findViewById(R.id.bt_delete_record);
@@ -106,6 +103,16 @@ public class RecordInfoUI extends Activity {
 				@Override
 				public void onClick(View v) {
 					showDialog(DELETE_DIALOG_ID);
+				}
+			});
+        	
+        	// add handler, to edit comment
+        	Button bt_edit_comment = (Button) findViewById(R.id.bt_edit_comment);
+        	bt_edit_comment.setOnClickListener( new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					showDialog(COMMENT_DIALOG_ID);
 				}
 			});
         	
@@ -134,6 +141,14 @@ public class RecordInfoUI extends Activity {
     	record.comment = comment;
     	return record.updateDB() == 1;
     }
+    
+    public void updateCommentView() {
+    	String comment = "";
+    	if (record != null) comment = record.comment;  
+    	TextView comment_tv = (TextView) findViewById(R.id.tv_comment);
+    	comment_tv.setText(comment);
+    	comment_tv.postInvalidate();
+    }
 	
     /**
      * Start MapUI activity with shown record (id).
@@ -156,7 +171,15 @@ public class RecordInfoUI extends Activity {
 			           public void onClick(DialogInterface dialog, int id) {
 			                RecordInfoUI.this.deleteReord();
 			           }
-			       });
+			       })
+			       .setNegativeButton(getString(R.string.cancel), 
+			    		   new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+					}
+				});
 			dialog = builder.create();
 			break;
 			
@@ -165,7 +188,7 @@ public class RecordInfoUI extends Activity {
 			dialog.setContentView(R.layout.comment_dialog);
 			dialog.setTitle(R.string.comment_dialog);
 			dialog.setCancelable(true);
-			Button bt_cancel = (Button) findViewById(R.id.bt_cancel);
+			Button bt_cancel = (Button) dialog.findViewById(R.id.bt_cancel);
 			bt_cancel.setOnClickListener(new OnClickListener() {
 				
 				@Override
@@ -174,19 +197,23 @@ public class RecordInfoUI extends Activity {
 				}
 			});
 			
-			Button bt_save = (Button) findViewById(R.id.bt_comment_save);
+			Button bt_save = (Button) dialog.findViewById(R.id.bt_comment_save);
 			bt_save.setOnClickListener(new OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
-					Editable comment = ((EditText)findViewById(R.id.ev_enter_comment)).getText();
+					Editable comment = ((EditText)dialog.findViewById(R.id.et_enter_comment)).getText();
 					if (RecordInfoUI.this.saveComment(comment.toString())) {
+						RecordInfoUI.this.updateCommentView();
 						dialog.cancel();
 					} else {
 						Toast.makeText(RecordInfoUI.this, "Can't save comment, please try again!", 3);
 					}
 				}
 			});
+			EditText et_comment = (EditText) dialog.findViewById(R.id.et_enter_comment);
+			et_comment.setText(record.comment);
+			et_comment.postInvalidate();
 			break;
 			
 		default:
